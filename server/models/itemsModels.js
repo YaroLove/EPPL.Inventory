@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 
-const MONGO_URI =
-  'mongodb+srv://YarosLove:XGMO1hFlok32QVRe@eppl.qwmnrw1.mongodb.net/storeroomDB?retryWrites=true&w=majority&appName=EPPL';
+const MONGO_URI = process.env.MONGO_URI;
 
 mongoose
   .connect(MONGO_URI)
