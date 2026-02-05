@@ -46,9 +46,15 @@ app.post(
 
 // Only serve build and static HTML in production mode
 if (process.env.NODE_ENV === 'production') {
-  app.use('/build', express.static(path.join(__dirname, '../build')));
-  app.get('/', (req, res) => {
-    return res.status(200).sendFile(path.join(__dirname, '../index.html'));
+  // 1. Роздаємо статичні файли (bundle.js тощо) прямо з кореня
+  // Раніше було app.use('/build', ...), що змушувало браузер шукати скрипти за адресою /build/bundle.js
+  app.use(express.static(path.join(__dirname, '../build')));
+
+  // 2. Універсальний роут для React (SPA)
+  // Важливо: віддаємо index.html саме з папки build, бо HtmlWebpackPlugin 
+  // вставив туди посилання на ваш bundle.js
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../build', 'index.html'));
   });
 }
 
