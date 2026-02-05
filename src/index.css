@@ -1,0 +1,323 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --brand-red: #e15252;
+  --brand-blue: #6aa9ff;
+  --brand-cyan: #59c2ff;
+  --bg-0: #0b1020;
+  --bg-1: #111827;
+  --bg-2: #0f172a;
+  --surface-1: rgba(255, 255, 255, 0.06);
+  --surface-2: rgba(255, 255, 255, 0.1);
+  --border-soft: rgba(255, 255, 255, 0.08);
+  --text-1: #e6edf7;
+  --text-2: #a8b3cf;
+  --text-3: #7c8bb0;
+  --radius-l: 18px;
+  --radius-m: 12px;
+  --shadow-1: 0 20px 60px rgba(2, 8, 23, 0.45);
+  --shadow-2: 0 10px 30px rgba(2, 8, 23, 0.3);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: radial-gradient(1200px 800px at 85% 10%, rgba(89, 194, 255, 0.18), transparent 60%),
+    radial-gradient(1000px 600px at 10% 20%, rgba(106, 169, 255, 0.16), transparent 60%),
+    linear-gradient(135deg, var(--bg-0) 0%, var(--bg-1) 50%, var(--bg-2) 100%);
+  background-attachment: fixed;
+  font-family: 'Space Grotesk', 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    sans-serif;
+  color: var(--text-1);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+}
+
+.App {
+  display: flex;
+  min-height: 100vh;
+  gap: 1.5rem;
+  padding: 1.5rem;
+}
+
+.ant-card,
+.ant-modal-content,
+.ant-menu,
+.ant-layout,
+.ant-list,
+.ant-table,
+.ant-input,
+.ant-select-selector,
+.ant-input-number,
+.ant-picker {
+  border-radius: var(--radius-m) !important;
+}
+
+.ant-card {
+  background: var(--surface-1) !important;
+  border: 1px solid var(--border-soft) !important;
+  color: var(--text-1) !important;
+  box-shadow: var(--shadow-2);
+  backdrop-filter: blur(14px);
+}
+
+.ant-typography,
+.ant-card-head-title,
+.ant-card-meta-title,
+.ant-card-meta-description,
+.ant-list-item,
+.ant-list-item-meta-title,
+.ant-list-item-meta-description,
+.ant-statistic-title,
+.ant-statistic-content {
+  color: var(--text-1) !important;
+}
+
+.ant-statistic-content {
+  font-weight: 600;
+}
+
+.ant-input,
+.ant-input-number,
+.ant-select-selector,
+.ant-picker,
+.ant-input-affix-wrapper {
+  background: rgba(15, 23, 42, 0.6) !important;
+  border: 1px solid var(--border-soft) !important;
+  color: var(--text-1) !important;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02);
+}
+
+.ant-input::placeholder,
+.ant-select-selection-placeholder,
+.ant-picker-input > input::placeholder {
+  color: var(--text-3) !important;
+}
+
+.ant-btn-primary {
+  background: linear-gradient(135deg, var(--brand-blue), var(--brand-cyan)) !important;
+  border: none !important;
+  box-shadow: 0 10px 20px rgba(89, 194, 255, 0.25);
+}
+
+.ant-btn-default,
+.ant-btn {
+  border-radius: 999px !important;
+}
+
+.ant-btn-default,
+.ant-btn-default span,
+.ant-btn-default .anticon,
+.ant-btn-link,
+.ant-btn-text {
+  color: var(--text-1) !important;
+}
+
+.ant-btn-default {
+  background: rgba(15, 23, 42, 0.7) !important;
+  border: 1px solid var(--border-soft) !important;
+}
+
+.ant-btn-default:hover,
+.ant-btn-default:focus {
+  background: rgba(15, 23, 42, 0.85) !important;
+  border-color: rgba(89, 194, 255, 0.5) !important;
+}
+
+.ant-checkbox-wrapper,
+.ant-checkbox-wrapper span,
+.ant-checkbox + span {
+  color: var(--text-1) !important;
+}
+
+.ant-list-item-action,
+.ant-list-item-action .anticon {
+  color: var(--text-2) !important;
+}
+
+.ant-badge-status-text,
+.ant-empty-description {
+  color: var(--text-2) !important;
+}
+
+.ant-tooltip-inner {
+  color: var(--text-1) !important;
+}
+
+.ant-dropdown-menu,
+.ant-dropdown-menu-item {
+  background: rgba(15, 23, 42, 0.98) !important;
+  color: var(--text-1) !important;
+  border: 1px solid var(--border-soft) !important;
+}
+
+.inventory-search .ant-input-group {
+  background: transparent !important;
+}
+
+.inventory-search .ant-input {
+  background: rgba(10, 18, 34, 0.7) !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  color: var(--text-1) !important;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02);
+}
+
+.inventory-search .ant-input:focus,
+.inventory-search .ant-input-focused {
+  border-color: rgba(89, 194, 255, 0.7) !important;
+  box-shadow: 0 0 0 3px rgba(89, 194, 255, 0.15) !important;
+}
+
+.inventory-search .ant-input-group-addon {
+  background: transparent !important;
+  border: none !important;
+}
+
+.inventory-search .ant-input-search-button {
+  background: linear-gradient(135deg, #6aa9ff, #59c2ff) !important;
+  border: none !important;
+  color: #ffffff !important;
+  border-radius: 999px !important;
+  width: 44px !important;
+}
+
+.inventory-search .ant-input-search-button .anticon {
+  color: #ffffff !important;
+}
+
+.ant-select-dropdown,
+.ant-select-item,
+.ant-select-item-option-content {
+  background: rgba(15, 23, 42, 0.98) !important;
+  color: var(--text-1) !important;
+}
+
+.ant-pagination-item a,
+.ant-pagination-prev .anticon,
+.ant-pagination-next .anticon {
+  color: var(--text-1) !important;
+}
+
+.ant-table,
+.ant-table-cell,
+.ant-table-thead > tr > th,
+.ant-table-tbody > tr > td {
+  color: var(--text-1) !important;
+  background: transparent !important;
+}
+
+.ant-menu-dark {
+  background: transparent !important;
+}
+
+.ant-menu-dark .ant-menu-item-selected {
+  background: linear-gradient(135deg, rgba(89, 194, 255, 0.25), rgba(106, 169, 255, 0.15)) !important;
+  border: 1px solid rgba(89, 194, 255, 0.35);
+}
+
+.ant-menu-dark .ant-menu-item,
+.ant-menu-dark .ant-submenu-title {
+  color: var(--text-2) !important;
+}
+
+.ant-menu-dark .ant-menu-item:hover,
+.ant-menu-dark .ant-submenu-title:hover {
+  color: var(--text-1) !important;
+}
+
+.ant-modal-content {
+  background: rgba(15, 23, 42, 0.95) !important;
+  border: 1px solid var(--border-soft) !important;
+  box-shadow: var(--shadow-1);
+}
+
+.ant-modal-header {
+  background: transparent !important;
+  border-bottom: 1px solid var(--border-soft) !important;
+}
+
+.ant-modal-title {
+  color: var(--text-1) !important;
+}
+
+.ant-modal-close-x,
+.ant-modal-close-x .anticon {
+  color: var(--text-2) !important;
+}
+
+.ant-form-item-label > label,
+.ant-form-item-label > label span,
+.ant-form-item-label > label::after {
+  color: var(--text-1) !important;
+}
+
+.ant-form-item-required::before {
+  color: #ff8b8b !important;
+}
+
+.ant-select-selection-item,
+.ant-picker-input > input,
+.ant-input-number-input,
+.ant-input-textarea textarea {
+  color: var(--text-1) !important;
+}
+
+.ant-upload,
+.ant-upload-list-item-name,
+.ant-upload-list-item-card-actions .anticon {
+  color: var(--text-1) !important;
+}
+
+.google-login-btn {
+  background: rgba(15, 23, 42, 0.85) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  color: var(--text-1) !important;
+  border-radius: 999px !important;
+  box-shadow: 0 10px 20px rgba(2, 8, 23, 0.35) !important;
+}
+
+.google-login-btn > div,
+.google-login-btn span {
+  color: var(--text-1) !important;
+}
+
+.google-login-btn .abcRioButtonIcon {
+  border-radius: 999px !important;
+}
+
+.ant-modal-footer .ant-btn-default,
+.ant-modal-footer .ant-btn-primary {
+  min-width: 90px;
+}
+
+.site-card-border-less-wrapper {
+  width: 100%;
+}
+
+.glass-panel {
+  background: var(--surface-1);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-l);
+  box-shadow: var(--shadow-1);
+  backdrop-filter: blur(16px);
+}
+
+@media (max-width: 1024px) {
+  .App {
+    flex-direction: column;
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .App {
+    gap: 1rem;
+    padding: 0.75rem;
+  }
+}
