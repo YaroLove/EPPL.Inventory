@@ -44,6 +44,10 @@ body {
   min-height: 100vh;
   gap: 1.5rem;
   padding: 1.5rem;
+
+  /* ensure items sit in one row and are vertically centered */
+  align-items: center;
+  flex-wrap: nowrap; /* prevent wrapping that caused stacking */
 }
 
 .ant-card,
@@ -159,39 +163,53 @@ body {
 
 /* Search field improvements */
 /* Revised search styling — target the wrapper only to avoid duplicate shapes */
+/* Make the search area flexible so it shares the row with the Add button */
 .inventory-search-wrapper {
   display: flex;
   align-items: center;
-  width: 100%;
+  gap: 1rem;
+  flex: 1 1 auto; /* take remaining horizontal space */
+  min-width: 0;   /* allow children to shrink properly in flex layouts */
 }
 
+/* Limit the input width only by its inline style or parent; allow fluid layout */
 .inventory-search {
+  width: 100%;
+  max-width: none;
   --search-height: 48px;
   --search-radius: 999px;
 }
 
+/* Ensure the visible control is the wrapper; remove any background on group addon */
+.inventory-search .ant-input-group-addon,
+.inventory-search .ant-input-group .ant-input-group-addon {
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
 /* Apply visual treatment to the wrapper (single visible element) */
+/* Keep the wrapper treatment (single pill) as before */
 .inventory-search .ant-input-affix-wrapper {
   height: var(--search-height) !important;
   border-radius: var(--search-radius) !important;
-  padding: 0 0.75rem !important; /* left/right internal spacing */
+  padding: 0 0.75rem !important;
   display: flex;
   align-items: center;
   gap: 0.5rem;
   background: rgba(10, 18, 34, 0.55) !important;
   border: 1px solid rgba(255,255,255,0.06) !important;
   box-shadow: 0 6px 18px rgba(2,8,23,0.22);
-  transition: box-shadow 180ms ease, border-color 180ms ease, background 180ms ease;
-  color: var(--text-1) !important;
 }
 
 /* Make the actual input element visually neutral so the wrapper defines the control */
+/* Keep inner input visually neutral */
 .inventory-search .ant-input {
   background: transparent !important;
   border: none !important;
   box-shadow: none !important;
-  height: auto !important;
-  padding: 0 !important;           /* wrapper supplies padding */
+  padding: 0 !important;
   margin: 0 !important;
   color: inherit !important;
 }
@@ -212,7 +230,7 @@ body {
   letter-spacing: 0.2px;
 }
 
-/* Circular search button styling (no change needed, kept for clarity) */
+/* Circular search button - make sure the white square behind it is removed */
 .inventory-search .ant-input-search-button {
   width: 44px !important;
   height: 44px !important;
@@ -221,8 +239,10 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  margin-left: 0.5rem !important;
   box-shadow: 0 8px 20px rgba(89,194,255,0.12);
+  background: linear-gradient(135deg, var(--brand-blue), var(--brand-cyan)) !important;
+  border: none !important;
+  color: #fff !important;
 }
 
 .inventory-search .ant-input-search-button.ant-btn-primary {
@@ -362,10 +382,24 @@ body {
   backdrop-filter: blur(16px);
 }
 
+/* Small screens: allow stacking / column direction again */
 @media (max-width: 1024px) {
   .App {
     flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
     padding: 1rem;
+  }
+  .inventory-search-wrapper {
+    width: 100%;
+    flex: 0 0 auto;
+  }
+  .inventory-search {
+    --search-height: 44px;
+  }
+  .inventory-search .ant-input-search-button {
+    width: 40px !important;
+    height: 40px !important;
   }
 }
 
