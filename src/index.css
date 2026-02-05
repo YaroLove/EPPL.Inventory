@@ -158,53 +158,61 @@ body {
 }
 
 /* Search field improvements */
+/* Revised search styling — target the wrapper only to avoid duplicate shapes */
 .inventory-search-wrapper {
   display: flex;
   align-items: center;
   width: 100%;
 }
 
-/* Custom properties to keep sizes easy to tweak */
 .inventory-search {
   --search-height: 48px;
   --search-radius: 999px;
 }
 
-/* Base input styling (applies to ant-input and affix wrapper) */
-.inventory-search .ant-input,
-.inventory-search .ant-input-affix-wrapper,
-.inventory-search .ant-input-group .ant-input {
+/* Apply visual treatment to the wrapper (single visible element) */
+.inventory-search .ant-input-affix-wrapper {
   height: var(--search-height) !important;
-  padding-left: 1.2rem !important;
-  padding-right: 0.5rem !important;
   border-radius: var(--search-radius) !important;
-  transition: box-shadow 180ms ease, border-color 180ms ease, background 180ms ease;
-  background: rgba(10, 18, 34, 0.55) !important; /* slightly lighter for input area */
+  padding: 0 0.75rem !important; /* left/right internal spacing */
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(10, 18, 34, 0.55) !important;
   border: 1px solid rgba(255,255,255,0.06) !important;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.02), 0 6px 18px rgba(2,8,23,0.22);
+  box-shadow: 0 6px 18px rgba(2,8,23,0.22);
+  transition: box-shadow 180ms ease, border-color 180ms ease, background 180ms ease;
   color: var(--text-1) !important;
 }
 
-/* Focus state */
-.inventory-search .ant-input:focus,
-.inventory-search .ant-input-focused,
-.inventory-search .ant-input-affix-wrapper:focus,
-.inventory-search .ant-input-affix-wrapper-focused {
-  outline: none !important;
-  border-color: rgba(89,194,255,0.55) !important;
-  box-shadow: 0 8px 24px rgba(89,194,255,0.10), inset 0 1px 0 rgba(255,255,255,0.02);
+/* Make the actual input element visually neutral so the wrapper defines the control */
+.inventory-search .ant-input {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  height: auto !important;
+  padding: 0 !important;           /* wrapper supplies padding */
+  margin: 0 !important;
+  color: inherit !important;
 }
 
-/* Improve placeholder readability */
-.inventory-search .ant-input::placeholder,
-.inventory-search .ant-input-affix-wrapper .ant-input::placeholder {
+/* Focus state — target the wrapper so only one glow appears */
+.inventory-search .ant-input-affix-wrapper:focus,
+.inventory-search .ant-input-affix-wrapper.ant-input-affix-wrapper-focused {
+  outline: none !important;
+  border-color: rgba(89,194,255,0.55) !important;
+  box-shadow: 0 8px 24px rgba(89,194,255,0.10);
+}
+
+/* Placeholder styling remains on the input */
+.inventory-search .ant-input::placeholder {
   color: var(--text-3) !important;
   opacity: 1;
   font-weight: 500;
   letter-spacing: 0.2px;
 }
 
-/* Circular search button styling */
+/* Circular search button styling (no change needed, kept for clarity) */
 .inventory-search .ant-input-search-button {
   width: 44px !important;
   height: 44px !important;
@@ -217,19 +225,16 @@ body {
   box-shadow: 0 8px 20px rgba(89,194,255,0.12);
 }
 
-/* Match button colors to your brand */
 .inventory-search .ant-input-search-button.ant-btn-primary {
   background: linear-gradient(135deg, var(--brand-blue), var(--brand-cyan)) !important;
   border: none !important;
   color: #fff !important;
 }
 
-/* Lighter clear icon color so it isn't visually noisy */
 .inventory-search .ant-input-clear-icon {
   color: var(--text-2) !important;
 }
 
-/* Responsive tweak */
 @media (max-width: 640px) {
   .inventory-search {
     --search-height: 44px;
