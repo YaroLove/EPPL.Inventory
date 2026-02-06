@@ -1,5 +1,5 @@
 {
-  "name": "storeroom",
+  "name": "EPPL Inventory",
   "version": "1.0.0",
   "description": "A management app for laboratory supplies and equipment",
   "main": "index.js",
