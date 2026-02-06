@@ -95,7 +95,7 @@ const NavContainer = (props) => {
             onClick={() => {
               dispatch(setDisplay('default'));
             }}>
-              <img src="https://6983befb32fdc2721e45d6ac.imgix.net/EPPL/Inventory/Logo_EPPL.jpeg" style={{ width: '200px', height: 'auto'}} alt="EPPL Logo" />
+              <img src="https://6983befb32fdc2721e45d6ac.imgix.net/EPPL/Inventory/WhiteVersio_LogoMakr-300dpi.png" style={{ width: '200px', height: 'auto'}} alt="EPPL Logo" />
           </Title>
           <Menu.Item key="dashboard" icon={<DashboardOutlined />}>
             Dashboard
