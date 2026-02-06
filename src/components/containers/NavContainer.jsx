@@ -115,9 +115,9 @@ const NavContainer = (props) => {
             </Menu.Item>
           </SubMenu>
           <SubMenu key="sub2" icon={<ShoppingCartOutlined />} title="Order">
-            <Menu.Item key="5">VWR</Menu.Item>
-            <Menu.Item key="6">ThermoFisher</Menu.Item>
-            <Menu.Item key="7">Barker Hall</Menu.Item>
+            <Menu.Item key="5">Rediometer</Menu.Item>
+            <Menu.Item key="6">Cardinal Health</Menu.Item>
+            <Menu.Item key="7">Others</Menu.Item>
           </SubMenu>
           <SubMenu icon={<UserOutlined />} key="sub4" title={currentUser}>
             <Menu.Item icon={<HeartOutlined />} key="favorites">
