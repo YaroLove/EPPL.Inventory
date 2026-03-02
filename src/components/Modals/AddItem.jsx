@@ -15,7 +15,7 @@ const AddItem = () => {
 
   // Form State
   const [name, setName] = useState('');
-  const [category, setCategory] = useState('consumables');
+  const [category, setCategory] = useState('MedCart');
   const [supplier, setSupplier] = useState('');
   const [catalog, setCatalog] = useState('');
   const [description, setDescription] = useState('');
@@ -130,10 +130,10 @@ const AddItem = () => {
         >
           <Form.Item label="Item category" required>
             <Select value={category} onChange={(val) => setCategory(val)}>
-              <Select.Option value="consumables">Consumables</Select.Option>
-              <Select.Option value="reagents">Reagents</Select.Option>
-              <Select.Option value="cells">Cell Lines</Select.Option>
-              <Select.Option value="equipment">Equipment</Select.Option>
+              <Select.Option value="MedCart">MedCart</Select.Option>
+              <Select.Option value="PowerLab">PowerLab</Select.Option>
+              <Select.Option value="Physioflow">Physioflow</Select.Option>
+              <Select.Option value="Bloodwork">Bloodwork</Select.Option>
             </Select>
           </Form.Item>
 
@@ -166,7 +166,7 @@ const AddItem = () => {
           </Form.Item>
 
           {/* Conditional Fields */}
-          {category === 'cells' && (
+          {category === 'Physioflow' && (
             <>
               <Form.Item label="Species" required>
                 <Input value={species} onChange={(e) => setSpecies(e.target.value)} />
@@ -181,12 +181,12 @@ const AddItem = () => {
             <DatePicker style={{ width: '100%' }} onChange={setExpirationDate} />
           </Form.Item>
 
-          <Form.Item label="Maintenance Date">
-            <DatePicker style={{ width: '100%' }} onChange={setLastMaintenance} placeholder="Last Maintenance" />
+          <Form.Item label="Last maintenance">
+            <DatePicker style={{ width: '100%' }} onChange={setLastMaintenance} placeholder="Last maintenance" />
           </Form.Item>
 
-          <Form.Item label="Calibration Date">
-            <DatePicker style={{ width: '100%' }} onChange={setCalibration} placeholder="Last Calibration" />
+          <Form.Item label="Calibration date">
+            <DatePicker style={{ width: '100%' }} onChange={setCalibration} placeholder="Calibration date" />
           </Form.Item>
 
           <Form.Item label="Manual URL">

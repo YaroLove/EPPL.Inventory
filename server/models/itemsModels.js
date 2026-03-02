@@ -12,7 +12,7 @@ mongoose
 
 const Schema = mongoose.Schema;
 
-const consumableSchema = new Schema({
+const MedCartSchema = new Schema({
   name: String,
   catalog: String,
   supplier: String,
@@ -26,9 +26,9 @@ const consumableSchema = new Schema({
   lastMaintenance: Date,
   calibration: Date,
 });
-const Consumable = mongoose.model('Consumable', consumableSchema);
+const MedCart = mongoose.model('MedCart', MedCartSchema);
 
-const reagentSchema = new Schema({
+const PowerLabSchema = new Schema({
   name: String,
   catalog: String,
   supplier: String,
@@ -42,9 +42,9 @@ const reagentSchema = new Schema({
   lastMaintenance: Date,
   calibration: Date,
 });
-const Reagent = mongoose.model('Reagent', reagentSchema);
+const PowerLab = mongoose.model('PowerLab', PowerLabSchema);
 
-const cellSchema = new Schema({
+const PhysioflowSchema = new Schema({
   name: String,
   catalog: String,
   supplier: String,
@@ -60,9 +60,9 @@ const cellSchema = new Schema({
   lastMaintenance: Date,
   calibration: Date,
 });
-const Cell = mongoose.model('Cell', cellSchema);
+const Physioflow = mongoose.model('Physioflow', PhysioflowSchema);
 
-const equipmentSchema = new Schema({
+const BloodworkSchema = new Schema({
   name: String,
   catalog: String,
   supplier: String,
@@ -76,11 +76,11 @@ const equipmentSchema = new Schema({
   image: String,
   quantity: Number,
 });
-const Equipment = mongoose.model('Equipment', equipmentSchema);
+const Bloodwork = mongoose.model('Bloodwork', BloodworkSchema);
 
 module.exports = {
-  Consumable,
-  Reagent,
-  Cell,
-  Equipment,
+  MedCart,
+  PowerLab,
+  Physioflow,
+  Bloodwork,
 };
