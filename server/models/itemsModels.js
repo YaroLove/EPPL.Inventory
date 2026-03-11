@@ -12,10 +12,11 @@ mongoose
 
 const Schema = mongoose.Schema;
 
-const MedCartSchema = new Schema({
+const ItemSchema = new Schema({
+  category: { type: String, required: true, index: true },
   name: String,
   catalog: String,
-  supplier: String,
+  supplier: { type: String, index: true },
   description: String,
   quantity: Number,
   minStock: Number,
@@ -25,62 +26,26 @@ const MedCartSchema = new Schema({
   image: String,
   lastMaintenance: Date,
   calibration: Date,
-});
-const MedCart = mongoose.model('MedCart', MedCartSchema);
-
-const PowerLabSchema = new Schema({
-  name: String,
-  catalog: String,
-  supplier: String,
-  description: String,
-  quantity: Number,
-  minStock: Number,
-  expirationDate: Date,
-  location: String,
-  manualUrl: String,
-  image: String,
-  lastMaintenance: Date,
-  calibration: Date,
-});
-const PowerLab = mongoose.model('PowerLab', PowerLabSchema);
-
-const PhysioflowSchema = new Schema({
-  name: String,
-  catalog: String,
-  supplier: String,
   species: String,
-  description: String,
   lastFreeze: String,
-  quantity: Number,
-  minStock: Number,
-  expirationDate: Date,
-  location: String,
-  manualUrl: String,
-  image: String,
-  lastMaintenance: Date,
-  calibration: Date,
 });
-const Physioflow = mongoose.model('Physioflow', PhysioflowSchema);
 
-const BloodworkSchema = new Schema({
-  name: String,
-  catalog: String,
-  supplier: String,
-  description: String,
-  lastMaintenance: Date,
-  calibration: Date,
-  minStock: Number,
-  expirationDate: Date,
-  location: String,
-  manualUrl: String,
-  image: String,
-  quantity: Number,
+const Item = mongoose.model('Item', ItemSchema);
+
+const CategorySchema = new Schema({
+  name: { type: String, required: true, unique: true },
 });
-const Bloodwork = mongoose.model('Bloodwork', BloodworkSchema);
+
+const Category = mongoose.model('Category', CategorySchema);
+
+const SupplierSchema = new Schema({
+  name: { type: String, required: true, unique: true },
+});
+
+const Supplier = mongoose.model('Supplier', SupplierSchema);
 
 module.exports = {
-  MedCart,
-  PowerLab,
-  Physioflow,
-  Bloodwork,
+  Item,
+  Category,
+  Supplier,
 };

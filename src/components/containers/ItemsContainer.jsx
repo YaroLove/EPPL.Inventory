@@ -1,20 +1,16 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Affix, Spin } from 'antd';
+import { Affix } from 'antd';
 
 import 'antd/dist/antd.css';
 import { SearchBar } from '../Items/SearchBar.jsx';
 import AddItem from '../Modals/AddItem.jsx';
-import MedCartList from '../Items/MedCartList.jsx';
-import PowerLabList from '../Items/PowerLabList.jsx';
-import PhysioflowList from '../Items/PhysioflowList.jsx';
-import BloodworkList from '../Items/BloodworkList.jsx';
+import GenericItemsList from '../Items/GenericItemsList.jsx';
 
 import { useSelector } from 'react-redux';
 import DefaultPage from '../Items/DefaultPage.jsx';
 import TechnicalChallenges from '../Items/TechnicalChallenges.jsx';
 import Dashboard from '../Dashboard/Dashboard.jsx';
-// import { useGetMedCartQuery } from '../../services/items.js';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -28,6 +24,9 @@ const Wrapper = styled.div`
 
 const ItemsContainer = () => {
   const display = useSelector((state) => state.display.display);
+
+  const displayType = display?.type || 'page';
+  const displayValue = display?.value || display;
 
   return (
     <Wrapper>
@@ -45,21 +44,19 @@ const ItemsContainer = () => {
             border: '1px solid rgba(255, 255, 255, 0.08)',
             backdropFilter: 'blur(12px)',
           }}>
-          <AddItem></AddItem>
-          <SearchBar></SearchBar>
+          <AddItem />
+          <SearchBar />
         </div>
       </Affix>
-      {display === 'default' && <DefaultPage></DefaultPage>}
-      {display === 'dashboard' && <Dashboard />}
-      {display === 'MedCart' && (
-        <MedCartList data={undefined}></MedCartList>
+      {displayType === 'page' && displayValue === 'default' && <DefaultPage />}
+      {displayType === 'page' && displayValue === 'dashboard' && <Dashboard />}
+      {displayType === 'page' && displayValue === 'favorites' && <TechnicalChallenges />}
+      {displayType === 'category' && (
+        <GenericItemsList key={`cat-${displayValue}`} category={displayValue} />
       )}
-      {display === 'PowerLab' && <PowerLabList data={undefined}></PowerLabList>}
-      {display === 'Physioflow' && <PhysioflowList data={undefined}></PhysioflowList>}
-      {display === 'Bloodwork' && (
-        <BloodworkList data={undefined}></BloodworkList>
+      {displayType === 'supplier' && (
+        <GenericItemsList key={`sup-${displayValue}`} supplier={displayValue} />
       )}
-      {display === 'favorites' && <TechnicalChallenges></TechnicalChallenges>}
     </Wrapper>
   );
 };

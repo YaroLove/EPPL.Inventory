@@ -3,7 +3,8 @@ import styled from 'styled-components';
 import { Modal, Button, Form, Input, Select, InputNumber } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
 import { useUpdateItemMutation } from '../../services/items.js';
-// import { useGetMedCartQuery } from '../../services/items.js';
+import { useGetCategoriesQuery } from '../../services/categories.js';
+import { useGetSuppliersQuery } from '../../services/suppliers.js';
 
 const StyledButton = styled(Button)`
   margin-top: 1rem;
@@ -13,9 +14,20 @@ const StyledButton = styled(Button)`
 const UpdateItem = (props) => {
   const [visible, setVisible] = useState(false);
   const [updateItem] = useUpdateItemMutation();
-  // const MedCart = useGetMedCartQuery();
+  const { data: categories = [] } = useGetCategoriesQuery();
+  const { data: suppliers = [] } = useGetSuppliersQuery();
 
-  const handleSubmit = async (e, value) => {
+  const [itemCategory, setItemCategory] = useState(props.category);
+  const [name, setName] = useState();
+  const [supplier, setSupplier] = useState();
+  const [catalog, setCatalog] = useState();
+  const [species, setSpecies] = useState();
+  const [description, setDescription] = useState();
+  const [freeze, setFreeze] = useState();
+  const [maintenance, setMaintenance] = useState();
+  const [qty, setQty] = useState();
+
+  const handleSubmit = async () => {
     setVisible(false);
     const updateInfo = {
       id: props.id,
@@ -37,51 +49,10 @@ const UpdateItem = (props) => {
     await updateItem(updateInfo);
   };
 
-  const [name, setName] = useState();
-  const handleNameChange = (e, value) => {
-    setName(e.target.value);
-    e.target.value = '';
-  };
-
-  const [itemCategory, setItemCategory] = useState(props.category);
-  const handleCategoryChange = (e, value) => {
-    setItemCategory(e);
-  };
-
-  const [supplier, setSupplier] = useState();
-  const handleSupplierChange = (e) => {
-    setSupplier(e.target.value);
-  };
-  const [catalog, setCatalog] = useState();
-  const handleCatalogChange = (e) => {
-    setCatalog(e.target.value);
-  };
-  const [species, setSpecies] = useState();
-  const handleSpeciesChange = (e) => {
-    setSpecies(e.target.value);
-  };
-  const [description, setDescription] = useState();
-  const handleDescriptionChange = (e) => {
-    setDescription(e.target.value);
-  };
-  const [freeze, setFreeze] = useState();
-  const handleFreezeChange = (e) => {
-    setFreeze(e.target.value);
-  };
-  const [maintenance, setMaintenance] = useState();
-  const handleMaintenanceChange = (e) => {
-    setMaintenance(e.target.value);
-  };
-  const [qty, setQty] = useState();
-  const handleQtyChange = (e) => {
-    setQty(e);
-  };
-
   return (
     <div>
       <StyledButton
         type="secondary"
-        // shape="round"
         icon={<EditOutlined />}
         size={'default'}
         onClick={() => setVisible(true)}>
@@ -95,57 +66,56 @@ const UpdateItem = (props) => {
         onCancel={() => setVisible(false)}
         width={850}>
         <Form
-          labelCol={{
-            span: 4,
-          }}
-          wrapperCol={{
-            span: 14,
-          }}
+          labelCol={{ span: 4 }}
+          wrapperCol={{ span: 14 }}
           layout="horizontal"
-          initialValues={{
-            size: 'default',
-          }}
           size={'default'}>
           <Form.Item label="Item category" required>
-            <Select onChange={handleCategoryChange} value={itemCategory}>
-              <Select.Option value="MedCart">MedCart</Select.Option>
-              <Select.Option value="PowerLab">PowerLab</Select.Option>
-              <Select.Option value="Physioflow">Physioflow</Select.Option>
-              <Select.Option value="Bloodwork">Bloodwork</Select.Option>
+            <Select onChange={(val) => setItemCategory(val)} value={itemCategory}>
+              {categories.map((cat) => (
+                <Select.Option key={cat._id} value={cat.name}>
+                  {cat.name}
+                </Select.Option>
+              ))}
             </Select>
           </Form.Item>
           <Form.Item label="Name">
-            <Input onChange={handleNameChange} />
+            <Input onChange={(e) => setName(e.target.value)} />
           </Form.Item>
           <Form.Item label="Supplier">
-            <Input onChange={handleSupplierChange} />
+            <Select
+              value={supplier}
+              placeholder="Select a supplier"
+              onChange={(val) => setSupplier(val)}
+              showSearch
+              optionFilterProp="children"
+              allowClear
+            >
+              {suppliers.map((sup) => (
+                <Select.Option key={sup._id} value={sup.name}>
+                  {sup.name}
+                </Select.Option>
+              ))}
+            </Select>
           </Form.Item>
-          {itemCategory === 'Physioflow' && (
-            <Form.Item label="Species">
-              <Input onChange={handleSpeciesChange} />
-            </Form.Item>
-          )}
+          <Form.Item label="Species">
+            <Input onChange={(e) => setSpecies(e.target.value)} />
+          </Form.Item>
           <Form.Item label="Catalog No.">
-            <Input onChange={handleCatalogChange} />
+            <Input onChange={(e) => setCatalog(e.target.value)} />
           </Form.Item>
           <Form.Item label="Description">
-            <Input onChange={handleDescriptionChange} />
+            <Input onChange={(e) => setDescription(e.target.value)} />
           </Form.Item>
-          {itemCategory === 'Physioflow' && (
-            <Form.Item label="Last freeze">
-              <Input onChange={handleFreezeChange} />
-            </Form.Item>
-          )}
-          {itemCategory === 'Bloodwork' && (
-            <Form.Item label="Last maintenance">
-              <Input onChange={handleMaintenanceChange} />
-            </Form.Item>
-          )}
-          {itemCategory !== 'Bloodwork' && (
-            <Form.Item label="Quantity">
-              <InputNumber onChange={handleQtyChange} name="qty" />
-            </Form.Item>
-          )}
+          <Form.Item label="Last freeze">
+            <Input onChange={(e) => setFreeze(e.target.value)} />
+          </Form.Item>
+          <Form.Item label="Last maintenance">
+            <Input onChange={(e) => setMaintenance(e.target.value)} />
+          </Form.Item>
+          <Form.Item label="Quantity">
+            <InputNumber onChange={(val) => setQty(val)} name="qty" />
+          </Form.Item>
         </Form>
       </Modal>
     </div>

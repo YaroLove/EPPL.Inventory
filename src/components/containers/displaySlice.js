@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  display: 'default',
+  display: { type: 'page', value: 'default' },
 };
 
 export const displaySlice = createSlice({
@@ -9,7 +9,11 @@ export const displaySlice = createSlice({
   initialState,
   reducers: {
     setDisplay: (state, action) => {
-      state.display = action.payload;
+      if (typeof action.payload === 'string') {
+        state.display = { type: 'page', value: action.payload };
+      } else {
+        state.display = action.payload;
+      }
     },
   },
 });

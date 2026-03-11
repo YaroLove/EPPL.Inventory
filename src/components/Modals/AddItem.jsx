@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import { Modal, Button, Form, Input, Select, InputNumber, DatePicker, Upload, message } from 'antd';
 import { DownloadOutlined, UploadOutlined } from '@ant-design/icons';
 import { useAddItemMutation } from '../../services/items.js';
+import { useGetCategoriesQuery } from '../../services/categories.js';
+import { useGetSuppliersQuery } from '../../services/suppliers.js';
 
 const StyledButton = styled(Button)`
   margin-top: 1rem;
@@ -12,18 +14,17 @@ const StyledButton = styled(Button)`
 const AddItem = () => {
   const [visible, setVisible] = useState(false);
   const [addItem] = useAddItemMutation();
+  const { data: categories = [] } = useGetCategoriesQuery();
+  const { data: suppliers = [] } = useGetSuppliersQuery();
 
-  // Form State
   const [name, setName] = useState('');
-  const [category, setCategory] = useState('MedCart');
+  const [category, setCategory] = useState('');
   const [supplier, setSupplier] = useState('');
   const [catalog, setCatalog] = useState('');
   const [description, setDescription] = useState('');
   const [quantity, setQuantity] = useState(0);
   const [species, setSpecies] = useState('');
   const [lastFreeze, setLastFreeze] = useState('');
-
-  // New Fields
   const [minStock, setMinStock] = useState(5);
   const [location, setLocation] = useState('');
   const [manualUrl, setManualUrl] = useState('');
@@ -35,7 +36,6 @@ const AddItem = () => {
   const handleUpload = async (info) => {
     if (info.file.status === 'done') {
       message.success(`${info.file.name} file uploaded successfully`);
-      // The response from server is in info.file.response
       setImagePath(info.file.response.filePath);
     } else if (info.file.status === 'error') {
       message.error(`${info.file.name} file upload failed.`);
@@ -45,16 +45,18 @@ const AddItem = () => {
   const uploadProps = {
     name: 'image',
     action: '/upload',
-    headers: {
-      authorization: 'authorization-text',
-    },
+    headers: { authorization: 'authorization-text' },
     onChange: handleUpload,
     maxCount: 1,
     showUploadList: true,
   };
 
-
   const handleSubmit = async () => {
+    if (!category) {
+      message.warning('Please select a category');
+      return;
+    }
+
     const newItem = {
       name,
       category,
@@ -64,7 +66,6 @@ const AddItem = () => {
       quantity,
       species,
       lastFreeze,
-      // New Fields
       minStock,
       location,
       manualUrl,
@@ -88,6 +89,7 @@ const AddItem = () => {
 
   const resetForm = () => {
     setName('');
+    setCategory(categories.length ? categories[0].name : '');
     setSupplier('');
     setCatalog('');
     setDescription('');
@@ -103,7 +105,6 @@ const AddItem = () => {
     setImagePath('');
   };
 
-
   return (
     <div>
       <StyledButton
@@ -111,7 +112,10 @@ const AddItem = () => {
         shape="round"
         icon={<DownloadOutlined />}
         size={'default'}
-        onClick={() => setVisible(true)}>
+        onClick={() => {
+          if (!category && categories.length) setCategory(categories[0].name);
+          setVisible(true);
+        }}>
         Add New Item
       </StyledButton>
       <Modal
@@ -129,11 +133,16 @@ const AddItem = () => {
           size={'default'}
         >
           <Form.Item label="Item category" required>
-            <Select value={category} onChange={(val) => setCategory(val)}>
-              <Select.Option value="MedCart">MedCart</Select.Option>
-              <Select.Option value="PowerLab">PowerLab</Select.Option>
-              <Select.Option value="Physioflow">Physioflow</Select.Option>
-              <Select.Option value="Bloodwork">Bloodwork</Select.Option>
+            <Select
+              value={category || undefined}
+              placeholder="Select a category"
+              onChange={(val) => setCategory(val)}
+            >
+              {categories.map((cat) => (
+                <Select.Option key={cat._id} value={cat.name}>
+                  {cat.name}
+                </Select.Option>
+              ))}
             </Select>
           </Form.Item>
 
@@ -142,7 +151,19 @@ const AddItem = () => {
           </Form.Item>
 
           <Form.Item label="Supplier" required>
-            <Input value={supplier} onChange={(e) => setSupplier(e.target.value)} />
+            <Select
+              value={supplier || undefined}
+              placeholder="Select a supplier"
+              onChange={(val) => setSupplier(val)}
+              showSearch
+              optionFilterProp="children"
+            >
+              {suppliers.map((sup) => (
+                <Select.Option key={sup._id} value={sup.name}>
+                  {sup.name}
+                </Select.Option>
+              ))}
+            </Select>
           </Form.Item>
 
           <Form.Item label="Catalog No." required>
@@ -165,17 +186,13 @@ const AddItem = () => {
             <Input.TextArea value={description} onChange={(e) => setDescription(e.target.value)} />
           </Form.Item>
 
-          {/* Conditional Fields */}
-          {category === 'Physioflow' && (
-            <>
-              <Form.Item label="Species" required>
-                <Input value={species} onChange={(e) => setSpecies(e.target.value)} />
-              </Form.Item>
-              <Form.Item label="Last freeze" required>
-                <Input value={lastFreeze} onChange={(e) => setLastFreeze(e.target.value)} />
-              </Form.Item>
-            </>
-          )}
+          <Form.Item label="Species">
+            <Input value={species} onChange={(e) => setSpecies(e.target.value)} />
+          </Form.Item>
+
+          <Form.Item label="Last freeze">
+            <Input value={lastFreeze} onChange={(e) => setLastFreeze(e.target.value)} />
+          </Form.Item>
 
           <Form.Item label="Expiration Date">
             <DatePicker style={{ width: '100%' }} onChange={setExpirationDate} />

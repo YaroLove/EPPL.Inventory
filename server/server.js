@@ -24,6 +24,8 @@ app.use(express.urlencoded({ extended: true }));
 
 // Route to /items
 app.use('/items', itemsRouter);
+app.use('/categories', require('./routes/categories'));
+app.use('/suppliers', require('./routes/suppliers'));
 app.use('/shopping', require('./routes/shoppingList'));
 app.use('/ai', require('./routes/ai'));
 app.use('/upload', require('./routes/upload'));

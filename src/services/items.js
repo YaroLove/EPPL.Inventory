@@ -5,23 +5,19 @@ export const itemsApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: '/items/',
   }),
-  tagTypes: ['MedCart', 'PowerLab', 'Bloodwork', 'Physioflow'],
+  tagTypes: ['Items'],
   endpoints: (builder) => ({
-    getMedCart: builder.query({
-      query: () => `MedCart`,
-      providesTags: ['MedCart'],
+    getItems: builder.query({
+      query: (category) => `${category}`,
+      providesTags: (result, error, category) => [{ type: 'Items', id: category }],
     }),
-    getPowerLab: builder.query({
-      query: () => `PowerLab`,
-      providesTags: ['PowerLab'],
+    getAllItems: builder.query({
+      query: () => '',
+      providesTags: ['Items'],
     }),
-    getBloodwork: builder.query({
-      query: () => `Bloodwork`,
-      providesTags: ['Bloodwork'],
-    }),
-    getPhysioflow: builder.query({
-      query: () => `Physioflow`,
-      providesTags: ['Physioflow'],
+    getItemsBySupplier: builder.query({
+      query: (supplier) => `by-supplier/${supplier}`,
+      providesTags: (result, error, supplier) => [{ type: 'Items', id: `supplier-${supplier}` }],
     }),
     addItem: builder.mutation({
       query({ category, ...body }) {
@@ -31,7 +27,7 @@ export const itemsApi = createApi({
           body,
         };
       },
-      invalidatesTags: ['MedCart', 'PowerLab', 'Bloodwork', 'Physioflow'],
+      invalidatesTags: ['Items'],
     }),
     deleteItem: builder.mutation({
       query({ id, category }) {
@@ -40,7 +36,7 @@ export const itemsApi = createApi({
           method: 'DELETE',
         };
       },
-      invalidatesTags: ['MedCart', 'PowerLab', 'Bloodwork', 'Physioflow'],
+      invalidatesTags: ['Items'],
     }),
     updateItem: builder.mutation({
       query({ id, category, ...body }) {
@@ -50,16 +46,15 @@ export const itemsApi = createApi({
           body,
         };
       },
-      invalidatesTags: ['MedCart', 'PowerLab', 'Bloodwork', 'Physioflow'],
+      invalidatesTags: ['Items'],
     }),
   }),
 });
 
 export const {
-  useGetMedCartQuery,
-  useGetPowerLabQuery,
-  useGetBloodworkQuery,
-  useGetPhysioflowQuery,
+  useGetItemsQuery,
+  useGetAllItemsQuery,
+  useGetItemsBySupplierQuery,
   useAddItemMutation,
   useDeleteItemMutation,
   useUpdateItemMutation,

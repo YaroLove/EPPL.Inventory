@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Card, Statistic, Row, Col, List, Input, Button, Checkbox, Spin, Typography } from 'antd';
 import { WarningOutlined, ShopOutlined, CalendarOutlined, PlusOutlined, DeleteOutlined } from '@ant-design/icons';
-import { useGetMedCartQuery, useGetPowerLabQuery, useGetBloodworkQuery, useGetPhysioflowQuery } from '../../services/items';
+import { useGetAllItemsQuery } from '../../services/items';
 import { useGetShoppingListQuery, useAddShoppingItemMutation, useDeleteShoppingItemMutation } from '../../services/shopping';
 import moment from 'moment';
 
@@ -57,19 +57,14 @@ const ShoppingListCard = styled(StyledCard)`
 `;
 
 const Dashboard = () => {
-    // Fetch Inventory Data
-    const { data: MedCart, isLoading: l1 } = useGetMedCartQuery();
-    const { data: PowerLab, isLoading: l2 } = useGetPowerLabQuery();
-    const { data: Bloodwork, isLoading: l3 } = useGetBloodworkQuery();
-    const { data: Physioflow, isLoading: l4 } = useGetPhysioflowQuery();
+    const { data: allItems = [], isLoading: l1 } = useGetAllItemsQuery();
 
-    // Fetch Shopping List
-    const { data: shoppingList, isLoading: l5 } = useGetShoppingListQuery();
+    const { data: shoppingList, isLoading: l2 } = useGetShoppingListQuery();
     const [addItem] = useAddShoppingItemMutation();
     const [deleteItem] = useDeleteShoppingItemMutation();
     const [newItemName, setNewItemName] = useState('');
 
-    const isLoading = l1 || l2 || l3 || l4 || l5;
+    const isLoading = l1 || l2;
 
     if (isLoading) return (
         <div style={{ width: '100%', height: '80vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
@@ -77,30 +72,19 @@ const Dashboard = () => {
         </div>
     );
 
-    // Aggregate Data
-    const allItems = [
-        ...(MedCart || []),
-        ...(PowerLab || []),
-        ...(Bloodwork || []),
-        ...(Physioflow || [])
-    ];
-
     const totalItemsCount = allItems.length;
 
-    // Logic: Low Stock
     const lowStockItems = allItems.filter(item => {
         const min = item.minStock !== undefined ? item.minStock : 5;
         return (item.quantity !== undefined && item.quantity <= min);
     });
 
-    // Logic: Expiring Soon (2 months)
     const twoMonthsFromNow = moment().add(2, 'months');
     const expiringItems = allItems.filter(item => {
         if (!item.expirationDate) return false;
         return moment(item.expirationDate).isBefore(twoMonthsFromNow);
     });
 
-    // Handler for Shopping List
     const handleAddItem = async () => {
         if (!newItemName.trim()) return;
         await addItem({ name: newItemName });

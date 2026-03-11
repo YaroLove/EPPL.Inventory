@@ -1,10 +1,5 @@
 const OpenAI = require("openai");
-const {
-    MedCart: MedCartModel,
-    PowerLab: PowerLabModel,
-    Physioflow: PhysioflowModel,
-    Bloodwork: BloodworkModel,
-} = require('../models/itemsModels');
+const { Item, Category } = require('../models/itemsModels');
 
 const aiController = {};
 
@@ -16,27 +11,24 @@ aiController.ask = async (req, res, next) => {
     }
 
     try {
-        // 1. Fetch Inventory Context
-        const [medCartItems, powerLabItems, physioflowItems, bloodworkItems] = await Promise.all([
-            MedCartModel.find().exec(),
-            PowerLabModel.find().exec(),
-            PhysioflowModel.find().exec(),
-            BloodworkModel.find().exec()
+        const [allItems, categories] = await Promise.all([
+            Item.find().exec(),
+            Category.find().exec(),
         ]);
 
-        // 2. Format Context for AI
-        const context = `
-      Current Inventory:
-      MedCart: ${JSON.stringify(medCartItems.map(i => ({ name: i.name, quantity: i.quantity, location: i.location })))}
-      PowerLab: ${JSON.stringify(powerLabItems.map(i => ({ name: i.name, quantity: i.quantity, location: i.location })))}
-      Physioflow: ${JSON.stringify(physioflowItems.map(i => ({ name: i.name, species: i.species, location: i.location })))}
-      Bloodwork: ${JSON.stringify(bloodworkItems.map(i => ({ name: i.name, maintenance: i.lastMaintenance, location: i.location })))}
-    `;
+        const grouped = {};
+        for (const cat of categories) {
+            grouped[cat.name] = allItems
+                .filter(i => i.category === cat.name)
+                .map(i => ({ name: i.name, quantity: i.quantity, location: i.location, supplier: i.supplier }));
+        }
 
-        // 3. Call OpenAI (Mock or Real based on Key)
+        const context = `Current Inventory:\n${Object.entries(grouped)
+            .map(([cat, items]) => `${cat}: ${JSON.stringify(items)}`)
+            .join('\n')}`;
+
         if (!process.env.OPENAI_API_KEY) {
-            // Mock response if no key for safety/testing without key
-            res.locals.answer = `I calculated the answer based on local data: (Simulated) You have ${medCartItems.length} MedCart, ${powerLabItems.length} PowerLab, ${physioflowItems.length} Physioflow, and ${bloodworkItems.length} Bloodwork items.`;
+            res.locals.answer = `I calculated the answer based on local data: (Simulated) You have ${allItems.length} total items across ${categories.length} categories.`;
         } else {
             const openai = new OpenAI({
                 apiKey: process.env.OPENAI_API_KEY,
