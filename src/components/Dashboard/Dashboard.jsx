@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Card, Statistic, Row, Col, List, Input, Button, Checkbox, Spin, Typography } from 'antd';
 import { WarningOutlined, ShopOutlined, CalendarOutlined, PlusOutlined, DeleteOutlined } from '@ant-design/icons';
-import { useGetConsumablesQuery, useGetReagentsQuery, useGetEquipmentQuery, useGetCellsQuery } from '../../services/items';
+import { useGetMedCartQuery, useGetPowerLabQuery, useGetBloodworkQuery, useGetPhysioflowQuery } from '../../services/items';
 import { useGetShoppingListQuery, useAddShoppingItemMutation, useDeleteShoppingItemMutation } from '../../services/shopping';
 import moment from 'moment';
 
@@ -58,10 +58,10 @@ const ShoppingListCard = styled(StyledCard)`
 
 const Dashboard = () => {
     // Fetch Inventory Data
-    const { data: consumables, isLoading: l1 } = useGetConsumablesQuery();
-    const { data: reagents, isLoading: l2 } = useGetReagentsQuery();
-    const { data: equipment, isLoading: l3 } = useGetEquipmentQuery();
-    const { data: cells, isLoading: l4 } = useGetCellsQuery();
+    const { data: MedCart, isLoading: l1 } = useGetMedCartQuery();
+    const { data: PowerLab, isLoading: l2 } = useGetPowerLabQuery();
+    const { data: Bloodwork, isLoading: l3 } = useGetBloodworkQuery();
+    const { data: Physioflow, isLoading: l4 } = useGetPhysioflowQuery();
 
     // Fetch Shopping List
     const { data: shoppingList, isLoading: l5 } = useGetShoppingListQuery();
@@ -79,10 +79,10 @@ const Dashboard = () => {
 
     // Aggregate Data
     const allItems = [
-        ...(consumables || []),
-        ...(reagents || []),
-        ...(equipment || []),
-        ...(cells || [])
+        ...(MedCart || []),
+        ...(PowerLab || []),
+        ...(Bloodwork || []),
+        ...(Physioflow || [])
     ];
 
     const totalItemsCount = allItems.length;

@@ -7,15 +7,15 @@ import UpdateItem from '../Modals/UpdateItem.jsx';
 import SearchInvalid from './SearchInvalid.jsx';
 import { useSelector } from 'react-redux';
 
-import { useGetConsumablesQuery } from '../../services/items.js';
+import { useGetMedCartQuery } from '../../services/items.js';
 
 const StyledSpin = styled(Spin)`
   margin: 2rem;
 `;
 
-const ConsumablesList = (props) => {
+const MedCartList = (props) => {
   const { data, error, isLoading, isSuccess, isError } =
-    useGetConsumablesQuery();
+    useGetMedCartQuery();
   const searchInput = useSelector((state) => state.filter.filter);
   const [foundItems, setFoundItems] = useState(data);
 
@@ -93,11 +93,11 @@ const ConsumablesList = (props) => {
                 <b>Qty:</b> {item.quantity}
               </p>
               <div style={{ display: 'flex' }}>
-                <UpdateItem id={item._id} category="consumables"></UpdateItem>
+                <UpdateItem id={item._id} category="MedCart"></UpdateItem>
                 <DeleteModal
                   name={item.name}
                   id={item._id}
-                  category="consumables"></DeleteModal>
+                  category="MedCart"></DeleteModal>
               </div>
             </StyledCard>
           );
@@ -148,11 +148,11 @@ const ConsumablesList = (props) => {
                 <b>Qty:</b> {item.quantity}
               </p>
               <div style={{ display: 'flex' }}>
-                <UpdateItem id={item._id} category="consumables"></UpdateItem>
+                <UpdateItem id={item._id} category="MedCart"></UpdateItem>
                 <DeleteModal
                   name={item.name}
                   id={item._id}
-                  category="consumables"></DeleteModal>
+                  category="MedCart"></DeleteModal>
               </div>
             </StyledCard>
           );
@@ -164,4 +164,4 @@ const ConsumablesList = (props) => {
   );
 };
 
-export default ConsumablesList;
+export default MedCartList;

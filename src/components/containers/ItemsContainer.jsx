@@ -5,16 +5,16 @@ import { Affix, Spin } from 'antd';
 import 'antd/dist/antd.css';
 import { SearchBar } from '../Items/SearchBar.jsx';
 import AddItem from '../Modals/AddItem.jsx';
-import ConsumablesList from '../Items/ConsumablesList.jsx';
-import ReagentsList from '../Items/ReagentsList.jsx';
-import CellLinesList from '../Items/CellLinesList.jsx';
-import EquipmentList from '../Items/EquipmentList.jsx';
+import MedCartList from '../Items/MedCartList.jsx';
+import PowerLabList from '../Items/PowerLabList.jsx';
+import PhysioflowList from '../Items/PhysioflowList.jsx';
+import BloodworkList from '../Items/BloodworkList.jsx';
 
 import { useSelector } from 'react-redux';
 import DefaultPage from '../Items/DefaultPage.jsx';
 import TechnicalChallenges from '../Items/TechnicalChallenges.jsx';
 import Dashboard from '../Dashboard/Dashboard.jsx';
-// import { useGetConsumablesQuery } from '../../services/items.js';
+// import { useGetMedCartQuery } from '../../services/items.js';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -51,13 +51,13 @@ const ItemsContainer = () => {
       </Affix>
       {display === 'default' && <DefaultPage></DefaultPage>}
       {display === 'dashboard' && <Dashboard />}
-      {display === 'consumables' && (
-        <ConsumablesList data={undefined}></ConsumablesList>
+      {display === 'MedCart' && (
+        <MedCartList data={undefined}></MedCartList>
       )}
-      {display === 'reagents' && <ReagentsList data={undefined}></ReagentsList>}
-      {display === 'cells' && <CellLinesList data={undefined}></CellLinesList>}
-      {display === 'equipment' && (
-        <EquipmentList data={undefined}></EquipmentList>
+      {display === 'PowerLab' && <PowerLabList data={undefined}></PowerLabList>}
+      {display === 'Physioflow' && <PhysioflowList data={undefined}></PhysioflowList>}
+      {display === 'Bloodwork' && (
+        <BloodworkList data={undefined}></BloodworkList>
       )}
       {display === 'favorites' && <TechnicalChallenges></TechnicalChallenges>}
     </Wrapper>

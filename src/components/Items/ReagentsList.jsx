@@ -7,7 +7,7 @@ import UpdateItem from '../Modals/UpdateItem.jsx';
 import SearchInvalid from './SearchInvalid.jsx';
 import { useSelector } from 'react-redux';
 
-import { useGetReagentsQuery } from '../../services/items';
+import { useGetPowerLabQuery } from '../../services/items';
 
 const GridContainer = styled.div`
   display: flex;
@@ -18,8 +18,8 @@ const GridContainer = styled.div`
   width: 100%;
 `;
 
-const ReagentsList = () => {
-  const { data, error, isLoading, isSuccess, isError } = useGetReagentsQuery();
+const PowerLabList = () => {
+  const { data, error, isLoading, isSuccess, isError } = useGetPowerLabQuery();
   const searchInput = useSelector((state) => state.filter.filter);
   const [foundItems, setFoundItems] = useState([]);
 
@@ -43,7 +43,7 @@ const ReagentsList = () => {
       )}
       {isError && (
         <div style={{ padding: '2rem', color: '#cf1322' }}>
-          Error loading reagents: {error?.message || 'Unknown error'}
+          Error loading PowerLab: {error?.message || 'Unknown error'}
         </div>
       )}
       {isSuccess && (
@@ -94,11 +94,11 @@ const ReagentsList = () => {
                   </p>
                 )}
                 <div style={{ display: 'flex' }}>
-                  <UpdateItem id={item._id} category="reagents"></UpdateItem>
+                  <UpdateItem id={item._id} category="PowerLab"></UpdateItem>
                   <DeleteModal
                     name={item.name}
                     id={item._id}
-                    category="reagents"></DeleteModal>
+                    category="PowerLab"></DeleteModal>
                 </div>
               </StyledCard>
             );
@@ -110,4 +110,4 @@ const ReagentsList = () => {
   );
 };
 
-export default ReagentsList;
+export default PowerLabList;

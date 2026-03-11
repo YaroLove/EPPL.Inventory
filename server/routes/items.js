@@ -9,62 +9,62 @@ const router = express.Router();
 router.get('/', (req, res) => {
   res.json('your reached the main page!');
 });
-router.get('/consumables', itemsController.getConsumables, (req, res) => {
-  res.status(200).json(res.locals.allConsumables);
+router.get('/MedCart', itemsController.getMedCart, (req, res) => {
+  res.status(200).json(res.locals.allMedCart);
 });
-router.get('/reagents', itemsController.getReagents, (req, res) => {
-  res.status(200).json(res.locals.allReagents);
+router.get('/PowerLab', itemsController.getPowerLab, (req, res) => {
+  res.status(200).json(res.locals.allPowerLab);
 });
-router.get('/cells', itemsController.getCells, (req, res) => {
-  res.status(200).json(res.locals.allCells);
+router.get('/Physioflow', itemsController.getPhysioflow, (req, res) => {
+  res.status(200).json(res.locals.allPhysioflow);
 });
-router.get('/equipment', itemsController.getEquipment, (req, res) => {
-  res.status(200).json(res.locals.allEquipment);
+router.get('/Bloodwork', itemsController.getBloodwork, (req, res) => {
+  res.status(200).json(res.locals.allBloodwork);
 });
 
 // POST ROUTES
-router.post('/consumables', itemsController.addConsumable, (req, res) => {
+router.post('/MedCart', itemsController.addMedCart, (req, res) => {
   res.sendStatus(200);
 });
-router.post('/reagents', itemsController.addReagent, (req, res) => {
+router.post('/PowerLab', itemsController.addPowerLab, (req, res) => {
   res.sendStatus(200);
 });
-router.post('/cells', itemsController.addCell, (req, res) => {
+router.post('/Physioflow', itemsController.addPhysioflow, (req, res) => {
   res.sendStatus(200);
 });
-router.post('/equipment', itemsController.addEquipment, (req, res) => {
+router.post('/Bloodwork', itemsController.addBloodwork, (req, res) => {
   res.sendStatus(200);
 });
 
 // DELETE ROUTES
 router.delete(
-  '/consumables/:id',
-  itemsController.deleteConsumable,
+  '/MedCart/:id',
+  itemsController.deleteMedCart,
   (req, res) => {
     res.sendStatus(200);
   }
 );
-router.delete('/reagents/:id', itemsController.deleteReagent, (req, res) => {
+router.delete('/PowerLab/:id', itemsController.deletePowerLab, (req, res) => {
   res.sendStatus(200);
 });
-router.delete('/cells/:id', itemsController.deleteCell, (req, res) => {
+router.delete('/Physioflow/:id', itemsController.deletePhysioflow, (req, res) => {
   res.sendStatus(200);
 });
-router.delete('/equipment/:id', itemsController.deleteEquipment, (req, res) => {
+router.delete('/Bloodwork/:id', itemsController.deleteBloodwork, (req, res) => {
   res.sendStatus(200);
 });
 
 // UPDATE ROUTES
-router.put('/consumables/:id', itemsController.updateConsumable, (req, res) => {
+router.put('/MedCart/:id', itemsController.updateMedCart, (req, res) => {
   res.sendStatus(200);
 });
-router.put('/reagents/:id', itemsController.updateReagent, (req, res) => {
+router.put('/PowerLab/:id', itemsController.updatePowerLab, (req, res) => {
   res.sendStatus(200);
 });
-router.put('/cells/:id', itemsController.updateCell, (req, res) => {
+router.put('/Physioflow/:id', itemsController.updatePhysioflow, (req, res) => {
   res.sendStatus(200);
 });
-router.put('/equipment/:id', itemsController.updateEquipment, (req, res) => {
+router.put('/Bloodwork/:id', itemsController.updateBloodwork, (req, res) => {
   res.sendStatus(200);
 });
 

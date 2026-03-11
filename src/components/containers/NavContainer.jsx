@@ -101,17 +101,17 @@ const NavContainer = (props) => {
             Dashboard
           </Menu.Item>
           <SubMenu key="sub1" icon={<DatabaseOutlined />} title="Inventory">
-            <Menu.Item key="consumables" icon={<PaperClipOutlined />}>
-              Consumables
+            <Menu.Item key="MedCart" icon={<PaperClipOutlined />}>
+              MedCart
             </Menu.Item>
-            <Menu.Item key="reagents" icon={<ExperimentOutlined />}>
-              Reagents
+            <Menu.Item key="PowerLab" icon={<ExperimentOutlined />}>
+              PowerLab
             </Menu.Item>
-            <Menu.Item key="cells" icon={<DeploymentUnitOutlined />}>
-              Cell Lines
+            <Menu.Item key="Physioflow" icon={<DeploymentUnitOutlined />}>
+              Physioflow
             </Menu.Item>
-            <Menu.Item key="equipment" icon={<ToolOutlined />}>
-              Equipment
+            <Menu.Item key="Bloodwork" icon={<ToolOutlined />}>
+              Bloodwork
             </Menu.Item>
           </SubMenu>
           <SubMenu key="sub2" icon={<ShoppingCartOutlined />} title="Order">

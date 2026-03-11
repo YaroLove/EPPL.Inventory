@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Modal, Button, Form, Input, Select, InputNumber } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
 import { useUpdateItemMutation } from '../../services/items.js';
-// import { useGetConsumablesQuery } from '../../services/items.js';
+// import { useGetMedCartQuery } from '../../services/items.js';
 
 const StyledButton = styled(Button)`
   margin-top: 1rem;
@@ -13,7 +13,7 @@ const StyledButton = styled(Button)`
 const UpdateItem = (props) => {
   const [visible, setVisible] = useState(false);
   const [updateItem] = useUpdateItemMutation();
-  // const consumable = useGetConsumablesQuery();
+  // const MedCart = useGetMedCartQuery();
 
   const handleSubmit = async (e, value) => {
     setVisible(false);
@@ -108,10 +108,10 @@ const UpdateItem = (props) => {
           size={'default'}>
           <Form.Item label="Item category" required>
             <Select onChange={handleCategoryChange} value={itemCategory}>
-              <Select.Option value="consumables">Consumables</Select.Option>
-              <Select.Option value="reagents">Reagents</Select.Option>
-              <Select.Option value="cells">Cell Lines</Select.Option>
-              <Select.Option value="equipment">Equipment</Select.Option>
+              <Select.Option value="MedCart">MedCart</Select.Option>
+              <Select.Option value="PowerLab">PowerLab</Select.Option>
+              <Select.Option value="Physioflow">Physioflow</Select.Option>
+              <Select.Option value="Bloodwork">Bloodwork</Select.Option>
             </Select>
           </Form.Item>
           <Form.Item label="Name">
@@ -120,7 +120,7 @@ const UpdateItem = (props) => {
           <Form.Item label="Supplier">
             <Input onChange={handleSupplierChange} />
           </Form.Item>
-          {itemCategory === 'cells' && (
+          {itemCategory === 'Physioflow' && (
             <Form.Item label="Species">
               <Input onChange={handleSpeciesChange} />
             </Form.Item>
@@ -131,17 +131,17 @@ const UpdateItem = (props) => {
           <Form.Item label="Description">
             <Input onChange={handleDescriptionChange} />
           </Form.Item>
-          {itemCategory === 'cells' && (
+          {itemCategory === 'Physioflow' && (
             <Form.Item label="Last freeze">
               <Input onChange={handleFreezeChange} />
             </Form.Item>
           )}
-          {itemCategory === 'equipment' && (
+          {itemCategory === 'Bloodwork' && (
             <Form.Item label="Last maintenance">
               <Input onChange={handleMaintenanceChange} />
             </Form.Item>
           )}
-          {itemCategory !== 'equipment' && (
+          {itemCategory !== 'Bloodwork' && (
             <Form.Item label="Quantity">
               <InputNumber onChange={handleQtyChange} name="qty" />
             </Form.Item>

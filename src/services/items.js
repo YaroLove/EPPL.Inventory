@@ -5,23 +5,23 @@ export const itemsApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: '/items/',
   }),
-  tagTypes: ['Consumable', 'Reagent', 'Equipment', 'Cell'],
+  tagTypes: ['MedCart', 'PowerLab', 'Bloodwork', 'Physioflow'],
   endpoints: (builder) => ({
-    getConsumables: builder.query({
-      query: () => `consumables`,
-      providesTags: ['Consumable'],
+    getMedCart: builder.query({
+      query: () => `MedCart`,
+      providesTags: ['MedCart'],
     }),
-    getReagents: builder.query({
-      query: () => `reagents`,
-      providesTags: ['Reagent'],
+    getPowerLab: builder.query({
+      query: () => `PowerLab`,
+      providesTags: ['PowerLab'],
     }),
-    getEquipment: builder.query({
-      query: () => `equipment`,
-      providesTags: ['Equipment'],
+    getBloodwork: builder.query({
+      query: () => `Bloodwork`,
+      providesTags: ['Bloodwork'],
     }),
-    getCells: builder.query({
-      query: () => `cells`,
-      providesTags: ['Cell'],
+    getPhysioflow: builder.query({
+      query: () => `Physioflow`,
+      providesTags: ['Physioflow'],
     }),
     addItem: builder.mutation({
       query({ category, ...body }) {
@@ -31,7 +31,7 @@ export const itemsApi = createApi({
           body,
         };
       },
-      invalidatesTags: ['Consumable', 'Reagent', 'Equipment', 'Cell'],
+      invalidatesTags: ['MedCart', 'PowerLab', 'Bloodwork', 'Physioflow'],
     }),
     deleteItem: builder.mutation({
       query({ id, category }) {
@@ -40,7 +40,7 @@ export const itemsApi = createApi({
           method: 'DELETE',
         };
       },
-      invalidatesTags: ['Consumable', 'Reagent', 'Equipment', 'Cell'],
+      invalidatesTags: ['MedCart', 'PowerLab', 'Bloodwork', 'Physioflow'],
     }),
     updateItem: builder.mutation({
       query({ id, category, ...body }) {
@@ -50,16 +50,16 @@ export const itemsApi = createApi({
           body,
         };
       },
-      invalidatesTags: ['Consumable', 'Reagent', 'Equipment', 'Cell'],
+      invalidatesTags: ['MedCart', 'PowerLab', 'Bloodwork', 'Physioflow'],
     }),
   }),
 });
 
 export const {
-  useGetConsumablesQuery,
-  useGetReagentsQuery,
-  useGetEquipmentQuery,
-  useGetCellsQuery,
+  useGetMedCartQuery,
+  useGetPowerLabQuery,
+  useGetBloodworkQuery,
+  useGetPhysioflowQuery,
   useAddItemMutation,
   useDeleteItemMutation,
   useUpdateItemMutation,

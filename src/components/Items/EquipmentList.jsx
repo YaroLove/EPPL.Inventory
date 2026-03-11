@@ -7,7 +7,7 @@ import UpdateItem from '../Modals/UpdateItem.jsx';
 import SearchInvalid from './SearchInvalid.jsx';
 import { useSelector } from 'react-redux';
 
-import { useGetEquipmentQuery } from '../../services/items';
+import { useGetBloodworkQuery } from '../../services/items';
 
 const GridContainer = styled.div`
   display: flex;
@@ -18,8 +18,8 @@ const GridContainer = styled.div`
   width: 100%;
 `;
 
-const EquipmentList = () => {
-  const { data, error, isLoading, isSuccess, isError } = useGetEquipmentQuery();
+const BloodworkList = () => {
+  const { data, error, isLoading, isSuccess, isError } = useGetBloodworkQuery();
   const searchInput = useSelector((state) => state.filter.filter);
   const [foundItems, setFoundItems] = useState([]);
 
@@ -43,7 +43,7 @@ const EquipmentList = () => {
       )}
       {isError && (
         <div style={{ padding: '2rem', color: '#cf1322' }}>
-          Error loading equipment: {error?.message || 'Unknown error'}
+          Error loading Bloodwork: {error?.message || 'Unknown error'}
         </div>
       )}
       {isSuccess && (
@@ -99,11 +99,11 @@ const EquipmentList = () => {
                   </p>
                 )}
                 <div style={{ display: 'flex' }}>
-                  <UpdateItem id={item._id} category="equipment"></UpdateItem>
+                  <UpdateItem id={item._id} category="Bloodwork"></UpdateItem>
                   <DeleteModal
                     name={item.name}
                     id={item._id}
-                    category="equipment"></DeleteModal>
+                    category="Bloodwork"></DeleteModal>
                 </div>
               </StyledCard>
             );
@@ -115,4 +115,4 @@ const EquipmentList = () => {
   );
 };
 
-export default EquipmentList;
+export default BloodworkList;

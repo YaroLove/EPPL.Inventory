@@ -2,7 +2,7 @@
 
 ## The problem
 
-Research labs contain hundreds, if not thousands, of supplies and equipment. There are many instances where researchers are working on an important experiment only to realize they’ve run out of a crucial reagent. This happens often because it is difficult to keep track of all of the supplies and reagents within a lab.
+Research labs contain hundreds, if not thousands, of supplies and Bloodwork. There are many instances where researchers are working on an important experiment only to realize they’ve run out of a crucial PowerLab. This happens often because it is difficult to keep track of all of the supplies and PowerLab within a lab.
 
 
 ## Current features

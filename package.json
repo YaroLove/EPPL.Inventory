@@ -1,7 +1,7 @@
 {
   "name": "storeroom",
   "version": "1.0.0",
-  "description": "A management app for laboratory supplies and equipment",
+  "description": "A management app for laboratory supplies and Bloodwork",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

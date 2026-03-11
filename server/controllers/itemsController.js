@@ -4,11 +4,11 @@ const models = require('../models/itemsModels');
 const itemsController = {};
 
 // GET MIDDLEWARE
-itemsController.getConsumables = (req, res, next) => {
-  models.Consumable.find()
+itemsController.getMedCart = (req, res, next) => {
+  models.MedCart.find()
     .exec()
-    .then((consumables) => {
-      res.locals.allConsumables = consumables;
+    .then((MedCart) => {
+      res.locals.allMedCart = MedCart;
       next();
     })
     .catch((err) => {
@@ -18,11 +18,11 @@ itemsController.getConsumables = (req, res, next) => {
       });
     });
 };
-itemsController.getReagents = (req, res, next) => {
-  models.Reagent.find()
+itemsController.getPowerLab = (req, res, next) => {
+  models.PowerLab.find()
     .exec()
-    .then((reagents) => {
-      res.locals.allReagents = reagents;
+    .then((PowerLab) => {
+      res.locals.allPowerLab = PowerLab;
       next();
     })
     .catch((err) => {
@@ -32,11 +32,11 @@ itemsController.getReagents = (req, res, next) => {
       });
     });
 };
-itemsController.getEquipment = (req, res, next) => {
-  models.Equipment.find()
+itemsController.getBloodwork = (req, res, next) => {
+  models.Bloodwork.find()
     .exec()
-    .then((equipment) => {
-      res.locals.allEquipment = equipment;
+    .then((Bloodwork) => {
+      res.locals.allBloodwork = Bloodwork;
       next();
     })
     .catch((err) => {
@@ -46,11 +46,11 @@ itemsController.getEquipment = (req, res, next) => {
       });
     });
 };
-itemsController.getCells = (req, res, next) => {
-  models.Cell.find()
+itemsController.getPhysioflow = (req, res, next) => {
+  models.Physioflow.find()
     .exec()
-    .then((cells) => {
-      res.locals.allCells = cells;
+    .then((Physioflow) => {
+      res.locals.allPhysioflow = Physioflow;
       next();
     })
     .catch((err) => {
@@ -62,8 +62,8 @@ itemsController.getCells = (req, res, next) => {
 };
 
 // POST MIDDLEWARE
-itemsController.addConsumable = (req, res, next) => {
-  models.Consumable.create(req.body)
+itemsController.addMedCart = (req, res, next) => {
+  models.MedCart.create(req.body)
     .then(() => next())
     .catch((err) => {
       next({
@@ -72,8 +72,8 @@ itemsController.addConsumable = (req, res, next) => {
       });
     });
 };
-itemsController.addReagent = (req, res, next) => {
-  models.Reagent.create(req.body)
+itemsController.addPowerLab = (req, res, next) => {
+  models.PowerLab.create(req.body)
     .then(() => next())
     .catch((err) => {
       next({
@@ -82,8 +82,8 @@ itemsController.addReagent = (req, res, next) => {
       });
     });
 };
-itemsController.addCell = (req, res, next) => {
-  models.Cell.create(req.body)
+itemsController.addPhysioflow = (req, res, next) => {
+  models.Physioflow.create(req.body)
     .then(() => next())
     .catch((err) => {
       next({
@@ -92,8 +92,8 @@ itemsController.addCell = (req, res, next) => {
       });
     });
 };
-itemsController.addEquipment = (req, res, next) => {
-  models.Equipment.create(req.body)
+itemsController.addBloodwork = (req, res, next) => {
+  models.Bloodwork.create(req.body)
     .then(() => next())
     .catch((err) => {
       next({
@@ -104,10 +104,10 @@ itemsController.addEquipment = (req, res, next) => {
 };
 
 // DELETE MIDDLEWARE
-itemsController.deleteConsumable = (req, res, next) => {
+itemsController.deleteMedCart = (req, res, next) => {
   const itemToDeleteId = req.params.id;
 
-  models.Consumable.deleteOne({ _id: itemToDeleteId })
+  models.MedCart.deleteOne({ _id: itemToDeleteId })
     .exec()
     .then(() => next())
     .catch((err) => {
@@ -117,10 +117,10 @@ itemsController.deleteConsumable = (req, res, next) => {
       });
     });
 };
-itemsController.deleteReagent = (req, res, next) => {
+itemsController.deletePowerLab = (req, res, next) => {
   const itemToDeleteId = req.params.id;
 
-  models.Reagent.deleteOne({ _id: itemToDeleteId })
+  models.PowerLab.deleteOne({ _id: itemToDeleteId })
     .exec()
     .then(() => next())
     .catch((err) => {
@@ -130,10 +130,10 @@ itemsController.deleteReagent = (req, res, next) => {
       });
     });
 };
-itemsController.deleteCell = (req, res, next) => {
+itemsController.deletePhysioflow = (req, res, next) => {
   const itemToDeleteId = req.params.id;
 
-  models.Cell.deleteOne({ _id: itemToDeleteId })
+  models.Physioflow.deleteOne({ _id: itemToDeleteId })
     .exec()
     .then(() => next())
     .catch((err) => {
@@ -143,10 +143,10 @@ itemsController.deleteCell = (req, res, next) => {
       });
     });
 };
-itemsController.deleteEquipment = (req, res, next) => {
+itemsController.deleteBloodwork = (req, res, next) => {
   const itemToDeleteId = req.params.id;
 
-  models.Equipment.deleteOne({ _id: itemToDeleteId })
+  models.Bloodwork.deleteOne({ _id: itemToDeleteId })
     .exec()
     .then(() => next())
     .catch((err) => {
@@ -158,10 +158,10 @@ itemsController.deleteEquipment = (req, res, next) => {
 };
 
 // UPDATE MIDDLEWARE
-itemsController.updateConsumable = (req, res, next) => {
+itemsController.updateMedCart = (req, res, next) => {
   const itemToUpdateId = req.params.id;
 
-  models.Consumable.findOneAndUpdate({ _id: itemToUpdateId }, req.body)
+  models.MedCart.findOneAndUpdate({ _id: itemToUpdateId }, req.body)
     .exec()
     .then(() => next())
     .catch((err) => {
@@ -171,10 +171,10 @@ itemsController.updateConsumable = (req, res, next) => {
       });
     });
 };
-itemsController.updateReagent = (req, res, next) => {
+itemsController.updatePowerLab = (req, res, next) => {
   const itemToUpdateId = req.params.id;
 
-  models.Reagent.findOneAndUpdate({ _id: itemToUpdateId }, req.body)
+  models.PowerLab.findOneAndUpdate({ _id: itemToUpdateId }, req.body)
     .exec()
     .then(() => next())
     .catch((err) => {
@@ -184,10 +184,10 @@ itemsController.updateReagent = (req, res, next) => {
       });
     });
 };
-itemsController.updateCell = (req, res, next) => {
+itemsController.updatePhysioflow = (req, res, next) => {
   const itemToUpdateId = req.params.id;
 
-  models.Cell.findOneAndUpdate({ _id: itemToUpdateId }, req.body)
+  models.Physioflow.findOneAndUpdate({ _id: itemToUpdateId }, req.body)
     .exec()
     .then(() => next())
     .catch((err) => {
@@ -197,10 +197,10 @@ itemsController.updateCell = (req, res, next) => {
       });
     });
 };
-itemsController.updateEquipment = (req, res, next) => {
+itemsController.updateBloodwork = (req, res, next) => {
   const itemToUpdateId = req.params.id;
 
-  models.Equipment.findOneAndUpdate({ _id: itemToUpdateId }, req.body)
+  models.Bloodwork.findOneAndUpdate({ _id: itemToUpdateId }, req.body)
     .exec()
     .then(() => next())
     .catch((err) => {

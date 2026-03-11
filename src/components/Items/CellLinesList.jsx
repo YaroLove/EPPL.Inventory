@@ -7,7 +7,7 @@ import UpdateItem from '../Modals/UpdateItem.jsx';
 import SearchInvalid from './SearchInvalid.jsx';
 import { useSelector } from 'react-redux';
 
-import { useGetCellsQuery } from '../../services/items.js';
+import { useGetPhysioflowQuery } from '../../services/items.js';
 
 const GridContainer = styled.div`
   display: flex;
@@ -18,8 +18,8 @@ const GridContainer = styled.div`
   width: 100%;
 `;
 
-const CellLinesList = () => {
-  const { data, error, isLoading, isSuccess, isError } = useGetCellsQuery();
+const PhysioflowList = () => {
+  const { data, error, isLoading, isSuccess, isError } = useGetPhysioflowQuery();
   const searchInput = useSelector((state) => state.filter.filter);
   const [foundItems, setFoundItems] = useState([]);
 
@@ -43,7 +43,7 @@ const CellLinesList = () => {
       )}
       {isError && (
         <div style={{ padding: '2rem', color: '#cf1322' }}>
-          Error loading cell lines: {error?.message || 'Unknown error'}
+          Error loading Physioflow: {error?.message || 'Unknown error'}
         </div>
       )}
       {isSuccess && (
@@ -104,11 +104,11 @@ const CellLinesList = () => {
                   </p>
                 )}
                 <div style={{ display: 'flex' }}>
-                  <UpdateItem id={item._id} category="cells"></UpdateItem>
+                  <UpdateItem id={item._id} category="Physioflow"></UpdateItem>
                   <DeleteModal
                     name={item.name}
                     id={item._id}
-                    category="cells"></DeleteModal>
+                    category="Physioflow"></DeleteModal>
                 </div>
               </StyledCard>
             );
@@ -120,4 +120,4 @@ const CellLinesList = () => {
   );
 };
 
-export default CellLinesList;
+export default PhysioflowList;
