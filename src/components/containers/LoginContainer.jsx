@@ -10,10 +10,12 @@ const StyledImage = styled.img`
   height: 100vh;
   object-fit: cover;
   transition: all 0.5s ease-in-out;
+  border-radius: 0 24px 24px 0;
 
   @media (max-width: 900px) {
     width: 100%;
     height: 40vh;
+    border-radius: 0 0 24px 24px;
   }
 `;
 
@@ -21,7 +23,7 @@ const Wrapper = styled.div`
   width: 100vw;
   height: 100vh;
   display: flex;
-  background: linear-gradient(135deg, #00213f 0%, #001020 100%);
+  background: var(--bg-page);
   overflow: hidden;
 
   @media (max-width: 900px) {
@@ -37,50 +39,44 @@ const LoginWrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 2rem;
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 2.5rem;
+  background: var(--bg-page);
 
   @media (max-width: 900px) {
     width: 100%;
-    border-left: none;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
   }
 `;
 
 const Title = styled.h1`
-  color: #ffffff;
+  color: var(--text-1);
   margin: 0;
   padding: 0;
-  font-size: 3.5rem;
-  font-family: 'MuseoModerno', cursive;
-  font-weight: 600;
-  letter-spacing: 0.1rem;
+  font-size: 2.5rem;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
   text-align: center;
-  text-shadow: 0 4px 10px rgba(0,0,0,0.3);
 `;
 
 const SubTitle = styled.h2`
   margin: 0.5rem 0 2.5rem 0;
-  color: #afb9dd;
-  font-size: 1.2rem;
-  font-family: 'Archivo', sans-serif;
-  font-weight: 300;
-  letter-spacing: 0.05rem;
-  opacity: 0.8;
+  color: var(--text-3);
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-align: center;
 `;
 
 const Card = styled.div`
-  background: rgba(255, 255, 255, 0.95);
-  padding: 3rem;
-  border-radius: 24px;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+  background: var(--surface);
+  padding: 2.5rem;
+  border-radius: var(--radius-l);
+  box-shadow: var(--shadow-raised);
+  border: 1px solid var(--border);
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 80%;
+  width: 85%;
   max-width: 400px;
 
   @media (max-width: 900px) {
@@ -90,38 +86,40 @@ const Card = styled.div`
 `;
 
 const BrandIcon = styled.div`
-  width: 70px;
-  height: 70px;
-  background: #951717;
-  border-radius: 12px;
-  margin-bottom: 2rem;
+  width: 64px;
+  height: 64px;
+  background: var(--brand-green);
+  border-radius: 16px;
+  margin-bottom: 1.75rem;
   display: flex;
   justify-content: center;
   align-items: center;
   color: white;
-  font-size: 1.5rem;
-  font-weight: bold;
+  font-size: 1.25rem;
+  font-weight: 700;
+  box-shadow: 0 4px 14px rgba(22, 163, 74, 0.35);
 `;
 
 const GuestLoginBtn = styled(Button)`
   width: 100%;
-  height: 45px;
-  margin-top: 1.5rem;
-  border-radius: 8px;
+  height: 44px;
+  margin-top: 1.25rem;
+  border-radius: 999px !important;
   font-weight: 500;
-  border: 1px solid #951717;
-  
+  border: 1px solid var(--border) !important;
+  color: var(--text-2) !important;
+  background: var(--surface) !important;
+
   &:hover {
-    color: #951717;
-    border-color: #951717;
+    border-color: var(--brand-green) !important;
+    color: var(--brand-green) !important;
   }
 `;
 
 const StyledP = styled.p`
-  color: #000000;
-  margin: 1.5rem 0;
-  font-family: 'Archivo', sans-serif;
-  font-size: 0.9rem;
+  color: var(--text-3);
+  margin: 1.25rem 0;
+  font-size: 0.85rem;
   position: relative;
   width: 100%;
   text-align: center;
@@ -132,7 +130,7 @@ const StyledP = styled.p`
     top: 50%;
     width: 35%;
     height: 1px;
-    background: #951717;
+    background: var(--border);
   }
   &:before { left: 0; }
   &:after { right: 0; }

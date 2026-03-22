@@ -1,22 +1,26 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
 
 :root {
-  --brand-red: #e15252;
-  --brand-blue: #6aa9ff;
-  --brand-cyan: #59c2ff;
-  --bg-0: #0b1020;
-  --bg-1: #111827;
-  --bg-2: #0f172a;
-  --surface-1: rgba(255, 255, 255, 0.06);
-  --surface-2: rgba(255, 255, 255, 0.1);
-  --border-soft: rgba(255, 255, 255, 0.08);
-  --text-1: #e6edf7;
-  --text-2: #a8b3cf;
-  --text-3: #7c8bb0;
-  --radius-l: 18px;
-  --radius-m: 12px;
-  --shadow-1: 0 20px 60px rgba(2, 8, 23, 0.45);
-  --shadow-2: 0 10px 30px rgba(2, 8, 23, 0.3);
+  --brand-green:        #16a34a;
+  --brand-green-dark:   #14532d;
+  --brand-green-light:  #dcfce7;
+  --brand-green-mid:    #1a5c3a;
+  --bg-page:            #f0f2f5;
+  --surface:            #ffffff;
+  --surface-hover:      #f9fafb;
+  --border:             #e5e7eb;
+  --border-light:       #f3f4f6;
+  --text-1:             #111827;
+  --text-2:             #4b5563;
+  --text-3:             #9ca3af;
+  --danger:             #dc2626;
+  --warning:            #d97706;
+  --radius-l:           16px;
+  --radius-m:           10px;
+  --radius-s:           8px;
+  --shadow-card:        0 2px 12px rgba(0, 0, 0, 0.07);
+  --shadow-raised:      0 6px 24px rgba(0, 0, 0, 0.10);
+  --shadow-sidebar:     0 8px 32px rgba(0, 0, 0, 0.15);
 }
 
 *,
@@ -27,12 +31,8 @@
 
 body {
   margin: 0;
-  background: radial-gradient(1200px 800px at 85% 10%, rgba(89, 194, 255, 0.18), transparent 60%),
-    radial-gradient(1000px 600px at 10% 20%, rgba(106, 169, 255, 0.16), transparent 60%),
-    linear-gradient(135deg, var(--bg-0) 0%, var(--bg-1) 50%, var(--bg-2) 100%);
-  background-attachment: fixed;
-  font-family: 'Space Grotesk', 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI',
-    sans-serif;
+  background: var(--bg-page);
+  font-family: 'Inter', 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   color: var(--text-1);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -42,18 +42,16 @@ body {
 .App {
   display: flex;
   min-height: 100vh;
-  gap: 1.5rem;
-  padding: 1.5rem;
-
-  /* ensure items sit in one row and are vertically centered */
-  align-items: center;
-  flex-wrap: nowrap; /* prevent wrapping that caused stacking */
+  gap: 1.25rem;
+  padding: 1.25rem;
+  align-items: flex-start;
+  flex-wrap: nowrap;
 }
+
+/* ─── Ant Design Global Overrides ─────────────────────────────── */
 
 .ant-card,
 .ant-modal-content,
-.ant-menu,
-.ant-layout,
 .ant-list,
 .ant-table,
 .ant-input,
@@ -63,16 +61,32 @@ body {
   border-radius: var(--radius-m) !important;
 }
 
+/* Cards */
 .ant-card {
-  background: var(--surface-1) !important;
-  border: 1px solid var(--border-soft) !important;
+  background: var(--surface) !important;
+  border: 1px solid var(--border) !important;
   color: var(--text-1) !important;
-  box-shadow: var(--shadow-2);
-  backdrop-filter: blur(14px);
+  box-shadow: var(--shadow-card) !important;
+  backdrop-filter: none !important;
 }
 
+.ant-card-head {
+  background: transparent !important;
+  border-bottom: 1px solid var(--border) !important;
+  color: var(--text-1) !important;
+}
+
+.ant-card-head-title {
+  color: var(--text-1) !important;
+  font-weight: 600 !important;
+}
+
+.ant-card-body {
+  color: var(--text-1) !important;
+}
+
+/* Typography */
 .ant-typography,
-.ant-card-head-title,
 .ant-card-meta-title,
 .ant-card-meta-description,
 .ant-list-item,
@@ -83,256 +97,45 @@ body {
   color: var(--text-1) !important;
 }
 
-.ant-statistic-content {
-  font-weight: 600;
+.ant-statistic-title {
+  color: var(--text-2) !important;
+  font-size: 0.8rem !important;
+  font-weight: 500 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.04em !important;
 }
 
+.ant-statistic-content {
+  font-weight: 700 !important;
+}
+
+/* Inputs */
 .ant-input,
 .ant-input-number,
 .ant-select-selector,
 .ant-picker,
-.ant-input-affix-wrapper {
-  background: rgba(15, 23, 42, 0.6) !important;
-  border: 1px solid var(--border-soft) !important;
+.ant-input-affix-wrapper,
+.ant-input-number-input {
+  background: var(--surface) !important;
+  border: 1px solid var(--border) !important;
   color: var(--text-1) !important;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02);
+  box-shadow: none !important;
+}
+
+.ant-input:focus,
+.ant-input-focused,
+.ant-input-affix-wrapper:focus,
+.ant-input-affix-wrapper-focused,
+.ant-select-focused .ant-select-selector,
+.ant-picker-focused {
+  border-color: var(--brand-green) !important;
+  box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.12) !important;
 }
 
 .ant-input::placeholder,
 .ant-select-selection-placeholder,
 .ant-picker-input > input::placeholder {
   color: var(--text-3) !important;
-}
-
-.ant-btn-primary {
-  background: linear-gradient(135deg, var(--brand-blue), var(--brand-cyan)) !important;
-  border: none !important;
-  box-shadow: 0 10px 20px rgba(89, 194, 255, 0.25);
-}
-
-.ant-btn-default,
-.ant-btn {
-  border-radius: 999px !important;
-}
-
-.ant-btn-default,
-.ant-btn-default span,
-.ant-btn-default .anticon,
-.ant-btn-link,
-.ant-btn-text {
-  color: var(--text-1) !important;
-}
-
-.ant-btn-default {
-  background: rgba(15, 23, 42, 0.7) !important;
-  border: 1px solid var(--border-soft) !important;
-}
-
-.ant-btn-default:hover,
-.ant-btn-default:focus {
-  background: rgba(15, 23, 42, 0.85) !important;
-  border-color: rgba(89, 194, 255, 0.5) !important;
-}
-
-.ant-checkbox-wrapper,
-.ant-checkbox-wrapper span,
-.ant-checkbox + span {
-  color: var(--text-1) !important;
-}
-
-.ant-list-item-action,
-.ant-list-item-action .anticon {
-  color: var(--text-2) !important;
-}
-
-.ant-badge-status-text,
-.ant-empty-description {
-  color: var(--text-2) !important;
-}
-
-.ant-tooltip-inner {
-  color: var(--text-1) !important;
-}
-
-.ant-dropdown-menu,
-.ant-dropdown-menu-item {
-  background: rgba(15, 23, 42, 0.98) !important;
-  color: var(--text-1) !important;
-  border: 1px solid var(--border-soft) !important;
-}
-
-/* Search field improvements */
-/* Revised search styling — target the wrapper only to avoid duplicate shapes */
-/* Make the search area flexible so it shares the row with the Add button */
-.inventory-search-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  flex: 1 1 auto; /* take remaining horizontal space */
-  min-width: 0;   /* allow children to shrink properly in flex layouts */
-}
-
-/* Limit the input width only by its inline style or parent; allow fluid layout */
-.inventory-search {
-  width: 100%;
-  max-width: none;
-  --search-height: 48px;
-  --search-radius: 999px;
-}
-
-/* Ensure the visible control is the wrapper; remove any background on group addon */
-.inventory-search .ant-input-group-addon,
-.inventory-search .ant-input-group .ant-input-group-addon {
-  background: transparent !important;
-  border: none !important;
-  padding: 0 !important;
-  margin: 0 !important;
-}
-
-/* Apply visual treatment to the wrapper (single visible element) */
-/* Keep the wrapper treatment (single pill) as before */
-.inventory-search .ant-input-affix-wrapper {
-  height: var(--search-height) !important;
-  border-radius: var(--search-radius) !important;
-  padding: 0 0.75rem !important;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  background: rgba(10, 18, 34, 0.55) !important;
-  border: 1px solid rgba(255,255,255,0.06) !important;
-  box-shadow: 0 6px 18px rgba(2,8,23,0.22);
-}
-
-/* Make the actual input element visually neutral so the wrapper defines the control */
-/* Keep inner input visually neutral */
-.inventory-search .ant-input {
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  color: inherit !important;
-}
-
-/* Focus state — target the wrapper so only one glow appears */
-.inventory-search .ant-input-affix-wrapper:focus,
-.inventory-search .ant-input-affix-wrapper.ant-input-affix-wrapper-focused {
-  outline: none !important;
-  border-color: rgba(89,194,255,0.55) !important;
-  box-shadow: 0 8px 24px rgba(89,194,255,0.10);
-}
-
-/* Placeholder styling remains on the input */
-.inventory-search .ant-input::placeholder {
-  color: var(--text-3) !important;
-  opacity: 1;
-  font-weight: 500;
-  letter-spacing: 0.2px;
-}
-
-/* Circular search button - make sure the white square behind it is removed */
-.inventory-search .ant-input-search-button {
-  width: 44px !important;
-  height: 44px !important;
-  border-radius: 50% !important;
-  padding: 0 !important;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 8px 20px rgba(89,194,255,0.12);
-  background: linear-gradient(135deg, var(--brand-blue), var(--brand-cyan)) !important;
-  border: none !important;
-  color: #fff !important;
-}
-
-.inventory-search .ant-input-search-button.ant-btn-primary {
-  background: linear-gradient(135deg, var(--brand-blue), var(--brand-cyan)) !important;
-  border: none !important;
-  color: #fff !important;
-}
-
-.inventory-search .ant-input-clear-icon {
-  color: var(--text-2) !important;
-}
-
-@media (max-width: 640px) {
-  .inventory-search {
-    --search-height: 44px;
-  }
-  .inventory-search .ant-input-search-button {
-    width: 40px !important;
-    height: 40px !important;
-  }
-}
-
-.ant-select-dropdown,
-.ant-select-item,
-.ant-select-item-option-content {
-  background: rgba(15, 23, 42, 0.98) !important;
-  color: var(--text-1) !important;
-}
-
-.ant-pagination-item a,
-.ant-pagination-prev .anticon,
-.ant-pagination-next .anticon {
-  color: var(--text-1) !important;
-}
-
-.ant-table,
-.ant-table-cell,
-.ant-table-thead > tr > th,
-.ant-table-tbody > tr > td {
-  color: var(--text-1) !important;
-  background: transparent !important;
-}
-
-.ant-menu-dark {
-  background: transparent !important;
-}
-
-.ant-menu-dark .ant-menu-item-selected {
-  background: linear-gradient(135deg, rgba(89, 194, 255, 0.25), rgba(106, 169, 255, 0.15)) !important;
-  border: 1px solid rgba(89, 194, 255, 0.35);
-}
-
-.ant-menu-dark .ant-menu-item,
-.ant-menu-dark .ant-submenu-title {
-  color: var(--text-2) !important;
-}
-
-.ant-menu-dark .ant-menu-item:hover,
-.ant-menu-dark .ant-submenu-title:hover {
-  color: var(--text-1) !important;
-}
-
-.ant-modal-content {
-  background: rgba(15, 23, 42, 0.95) !important;
-  border: 1px solid var(--border-soft) !important;
-  box-shadow: var(--shadow-1);
-}
-
-.ant-modal-header {
-  background: transparent !important;
-  border-bottom: 1px solid var(--border-soft) !important;
-}
-
-.ant-modal-title {
-  color: var(--text-1) !important;
-}
-
-.ant-modal-close-x,
-.ant-modal-close-x .anticon {
-  color: var(--text-2) !important;
-}
-
-.ant-form-item-label > label,
-.ant-form-item-label > label span,
-.ant-form-item-label > label::after {
-  color: var(--text-1) !important;
-}
-
-.ant-form-item-required::before {
-  color: #ff8b8b !important;
 }
 
 .ant-select-selection-item,
@@ -342,18 +145,346 @@ body {
   color: var(--text-1) !important;
 }
 
+/* Buttons */
+.ant-btn {
+  border-radius: 999px !important;
+  font-weight: 500 !important;
+  transition: all 0.2s ease !important;
+}
+
+.ant-btn-primary {
+  background: var(--brand-green) !important;
+  border-color: var(--brand-green) !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 8px rgba(22, 163, 74, 0.25) !important;
+}
+
+.ant-btn-primary:hover,
+.ant-btn-primary:focus {
+  background: #15803d !important;
+  border-color: #15803d !important;
+  box-shadow: 0 4px 14px rgba(22, 163, 74, 0.35) !important;
+}
+
+.ant-btn-default {
+  background: var(--surface) !important;
+  border-color: var(--border) !important;
+  color: var(--text-1) !important;
+}
+
+.ant-btn-default:hover,
+.ant-btn-default:focus {
+  border-color: var(--brand-green) !important;
+  color: var(--brand-green) !important;
+}
+
+.ant-btn-text,
+.ant-btn-link {
+  color: var(--text-2) !important;
+}
+
+.ant-btn-text:hover,
+.ant-btn-link:hover {
+  color: var(--brand-green) !important;
+  background: var(--brand-green-light) !important;
+}
+
+.ant-btn-dangerous {
+  color: var(--danger) !important;
+  border-color: var(--danger) !important;
+}
+
+.ant-btn-dangerous:hover {
+  background: #fef2f2 !important;
+}
+
+/* Checkboxes */
+.ant-checkbox-wrapper,
+.ant-checkbox-wrapper span,
+.ant-checkbox + span {
+  color: var(--text-1) !important;
+}
+
+.ant-checkbox-checked .ant-checkbox-inner {
+  background-color: var(--brand-green) !important;
+  border-color: var(--brand-green) !important;
+}
+
+/* List items */
+.ant-list-item {
+  border-bottom: 1px solid var(--border-light) !important;
+}
+
+.ant-list-item-action,
+.ant-list-item-action .anticon {
+  color: var(--text-3) !important;
+}
+
+/* Badges and empty states */
+.ant-badge-status-text,
+.ant-empty-description {
+  color: var(--text-2) !important;
+}
+
+.ant-tooltip-inner {
+  background: var(--text-1) !important;
+  color: #fff !important;
+  border-radius: var(--radius-s) !important;
+}
+
+/* Dropdowns */
+.ant-dropdown-menu,
+.ant-dropdown-menu-item {
+  background: var(--surface) !important;
+  color: var(--text-1) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius-s) !important;
+}
+
+.ant-dropdown-menu-item:hover {
+  background: var(--surface-hover) !important;
+}
+
+/* Selects */
+.ant-select-dropdown,
+.ant-select-item {
+  background: var(--surface) !important;
+  color: var(--text-1) !important;
+}
+
+.ant-select-item-option-active,
+.ant-select-item-option-selected {
+  background: var(--brand-green-light) !important;
+  color: var(--brand-green-dark) !important;
+  font-weight: 500 !important;
+}
+
+.ant-select-item-option-content {
+  color: inherit !important;
+}
+
+/* Tables */
+.ant-table,
+.ant-table-cell,
+.ant-table-thead > tr > th,
+.ant-table-tbody > tr > td {
+  color: var(--text-1) !important;
+  background: var(--surface) !important;
+}
+
+.ant-table-thead > tr > th {
+  background: var(--surface-hover) !important;
+  font-weight: 600 !important;
+  color: var(--text-2) !important;
+}
+
+.ant-table-tbody > tr:hover > td {
+  background: var(--surface-hover) !important;
+}
+
+/* Pagination */
+.ant-pagination-item a,
+.ant-pagination-prev .anticon,
+.ant-pagination-next .anticon {
+  color: var(--text-2) !important;
+}
+
+.ant-pagination-item-active {
+  border-color: var(--brand-green) !important;
+}
+
+.ant-pagination-item-active a {
+  color: var(--brand-green) !important;
+}
+
+/* Menu overrides — sidebar handled via styled-components; keep only submenu popup */
+.ant-menu-submenu-popup,
+.ant-menu-submenu-popup .ant-menu {
+  background: var(--surface) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius-m) !important;
+  box-shadow: var(--shadow-raised) !important;
+}
+
+.ant-menu-submenu-popup .ant-menu-item {
+  color: var(--text-1) !important;
+}
+
+.ant-menu-submenu-popup .ant-menu-item:hover {
+  background: var(--surface-hover) !important;
+}
+
+/* Modals */
+.ant-modal-content {
+  background: var(--surface) !important;
+  border: 1px solid var(--border) !important;
+  box-shadow: var(--shadow-raised) !important;
+  border-radius: var(--radius-l) !important;
+}
+
+.ant-modal-header {
+  background: transparent !important;
+  border-bottom: 1px solid var(--border) !important;
+}
+
+.ant-modal-title {
+  color: var(--text-1) !important;
+  font-weight: 600 !important;
+}
+
+.ant-modal-close-x,
+.ant-modal-close-x .anticon {
+  color: var(--text-3) !important;
+}
+
+.ant-modal-footer {
+  border-top: 1px solid var(--border) !important;
+}
+
+/* Forms */
+.ant-form-item-label > label,
+.ant-form-item-label > label span {
+  color: var(--text-2) !important;
+  font-weight: 500 !important;
+}
+
+.ant-form-item-required::before {
+  color: var(--danger) !important;
+}
+
+/* Upload */
 .ant-upload,
 .ant-upload-list-item-name,
 .ant-upload-list-item-card-actions .anticon {
   color: var(--text-1) !important;
 }
 
+.ant-upload-list-item {
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius-s) !important;
+}
+
+/* Collapse */
+.ant-collapse {
+  background: transparent !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius-m) !important;
+}
+
+.ant-collapse-header {
+  color: var(--text-1) !important;
+  font-weight: 500 !important;
+}
+
+.ant-collapse-content {
+  border-top: 1px solid var(--border) !important;
+  background: var(--surface) !important;
+  color: var(--text-1) !important;
+}
+
+/* Popconfirm */
+.ant-popover-inner {
+  background: var(--surface) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius-m) !important;
+  box-shadow: var(--shadow-raised) !important;
+}
+
+.ant-popover-message-title,
+.ant-popover-message {
+  color: var(--text-1) !important;
+}
+
+/* ─── Search Bar ────────────────────────────────────────────────── */
+
+.inventory-search-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.inventory-search {
+  width: 100%;
+  max-width: none;
+  --search-height: 42px;
+  --search-radius: 999px;
+}
+
+.inventory-search .ant-input-group-addon,
+.inventory-search .ant-input-group .ant-input-group-addon {
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.inventory-search .ant-input-affix-wrapper {
+  height: var(--search-height) !important;
+  border-radius: var(--search-radius) !important;
+  padding: 0 1rem !important;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--surface) !important;
+  border: 1px solid var(--border) !important;
+  box-shadow: var(--shadow-card) !important;
+}
+
+.inventory-search .ant-input {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  color: var(--text-1) !important;
+}
+
+.inventory-search .ant-input-affix-wrapper:focus,
+.inventory-search .ant-input-affix-wrapper.ant-input-affix-wrapper-focused {
+  outline: none !important;
+  border-color: var(--brand-green) !important;
+  box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.12) !important;
+}
+
+.inventory-search .ant-input::placeholder {
+  color: var(--text-3) !important;
+  font-weight: 400;
+}
+
+.inventory-search .ant-input-search-button {
+  width: 42px !important;
+  height: 42px !important;
+  border-radius: 50% !important;
+  padding: 0 !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--brand-green) !important;
+  border: none !important;
+  color: #fff !important;
+  box-shadow: 0 2px 8px rgba(22, 163, 74, 0.3) !important;
+}
+
+.inventory-search .ant-input-search-button.ant-btn-primary {
+  background: var(--brand-green) !important;
+  border: none !important;
+  color: #fff !important;
+}
+
+.inventory-search .ant-input-clear-icon {
+  color: var(--text-3) !important;
+}
+
+/* ─── Google Login ─────────────────────────────────────────────── */
+
 .google-login-btn {
-  background: rgba(15, 23, 42, 0.85) !important;
-  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  background: var(--surface) !important;
+  border: 1px solid var(--border) !important;
   color: var(--text-1) !important;
   border-radius: 999px !important;
-  box-shadow: 0 10px 20px rgba(2, 8, 23, 0.35) !important;
+  box-shadow: var(--shadow-card) !important;
 }
 
 .google-login-btn > div,
@@ -365,24 +496,28 @@ body {
   border-radius: 999px !important;
 }
 
+/* ─── Modal footer buttons ─────────────────────────────────────── */
+
 .ant-modal-footer .ant-btn-default,
 .ant-modal-footer .ant-btn-primary {
   min-width: 90px;
 }
+
+/* ─── Misc helper classes ──────────────────────────────────────── */
 
 .site-card-border-less-wrapper {
   width: 100%;
 }
 
 .glass-panel {
-  background: var(--surface-1);
-  border: 1px solid var(--border-soft);
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: var(--radius-l);
-  box-shadow: var(--shadow-1);
-  backdrop-filter: blur(16px);
+  box-shadow: var(--shadow-card);
 }
 
-/* Small screens: allow stacking / column direction again */
+/* ─── Responsive ───────────────────────────────────────────────── */
+
 @media (max-width: 1024px) {
   .App {
     flex-direction: column;
@@ -390,22 +525,25 @@ body {
     gap: 1rem;
     padding: 1rem;
   }
+
   .inventory-search-wrapper {
     width: 100%;
     flex: 0 0 auto;
-  }
-  .inventory-search {
-    --search-height: 44px;
-  }
-  .inventory-search .ant-input-search-button {
-    width: 40px !important;
-    height: 40px !important;
   }
 }
 
 @media (max-width: 640px) {
   .App {
-    gap: 1rem;
+    gap: 0.75rem;
     padding: 0.75rem;
+  }
+
+  .inventory-search {
+    --search-height: 40px;
+  }
+
+  .inventory-search .ant-input-search-button {
+    width: 38px !important;
+    height: 38px !important;
   }
 }

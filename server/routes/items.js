@@ -11,6 +11,10 @@ router.get('/by-supplier/:supplier', itemsController.getItemsBySupplier, (req, r
   res.status(200).json(res.locals.items);
 });
 
+router.get('/distinct/:field', itemsController.getDistinctValues, (req, res) => {
+  res.status(200).json(res.locals.distinctValues);
+});
+
 router.get('/:category', itemsController.getItems, (req, res) => {
   res.status(200).json(res.locals.items);
 });

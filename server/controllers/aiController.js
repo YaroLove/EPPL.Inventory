@@ -16,11 +16,21 @@ aiController.ask = async (req, res, next) => {
             Category.find().exec(),
         ]);
 
+        const titleOf = (i) =>
+            [i.name, i.itemType, i.sizeDimension].filter(Boolean).join(' - ') || i.name;
+
         const grouped = {};
         for (const cat of categories) {
             grouped[cat.name] = allItems
                 .filter(i => i.category === cat.name)
-                .map(i => ({ name: i.name, quantity: i.quantity, location: i.location, supplier: i.supplier }));
+                .map(i => ({
+                    title: titleOf(i),
+                    name: i.name,
+                    quantity: i.quantity,
+                    quantityUnit: i.quantityUnit,
+                    location: i.location,
+                    supplier: i.supplier,
+                }));
         }
 
         const context = `Current Inventory:\n${Object.entries(grouped)

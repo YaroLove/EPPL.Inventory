@@ -1,0 +1,193 @@
+const { FieldDefinition } = require('../models/itemsModels');
+
+const DEFAULT_FIELD_DEFINITIONS = [
+  {
+    label: 'Category',
+    fieldKey: 'category',
+    fieldType: 'select_category',
+    required: true,
+    order: 0,
+    section: 'required',
+    builtin: true,
+    hidden: false,
+  },
+  {
+    label: 'Name',
+    fieldKey: 'name',
+    fieldType: 'text',
+    required: true,
+    order: 1,
+    section: 'required',
+    builtin: true,
+    hidden: false,
+  },
+  {
+    label: 'Type',
+    fieldKey: 'itemType',
+    fieldType: 'text',
+    required: true,
+    order: 2,
+    section: 'required',
+    builtin: true,
+    hidden: false,
+  },
+  {
+    label: 'Size / Gauge / Dimension',
+    fieldKey: 'sizeDimension',
+    fieldType: 'text',
+    required: true,
+    order: 3,
+    section: 'required',
+    builtin: true,
+    hidden: false,
+  },
+  {
+    label: 'Supplier',
+    fieldKey: 'supplier',
+    fieldType: 'select_supplier',
+    required: true,
+    order: 4,
+    section: 'required',
+    builtin: true,
+    hidden: false,
+  },
+  {
+    label: 'Catalog No.',
+    fieldKey: 'catalog',
+    fieldType: 'text',
+    required: true,
+    order: 5,
+    section: 'required',
+    builtin: true,
+    hidden: false,
+  },
+  {
+    label: 'Quantity',
+    fieldKey: 'quantity',
+    fieldType: 'quantity_with_unit',
+    required: true,
+    order: 6,
+    section: 'required',
+    builtin: true,
+    hidden: false,
+  },
+  {
+    label: 'Description',
+    fieldKey: 'description',
+    fieldType: 'text',
+    required: false,
+    order: 10,
+    section: 'optional',
+    builtin: true,
+    hidden: false,
+  },
+  {
+    label: 'Location',
+    fieldKey: 'location',
+    fieldType: 'text',
+    required: false,
+    order: 11,
+    section: 'optional',
+    builtin: true,
+    hidden: false,
+  },
+  {
+    label: 'Species',
+    fieldKey: 'species',
+    fieldType: 'text',
+    required: false,
+    order: 12,
+    section: 'optional',
+    builtin: true,
+    hidden: false,
+  },
+  {
+    label: 'Last freeze',
+    fieldKey: 'lastFreeze',
+    fieldType: 'text',
+    required: false,
+    order: 13,
+    section: 'optional',
+    builtin: true,
+    hidden: false,
+  },
+  {
+    label: 'Min. Stock Alert',
+    fieldKey: 'minStock',
+    fieldType: 'number',
+    required: false,
+    order: 14,
+    section: 'optional',
+    builtin: true,
+    hidden: false,
+  },
+  {
+    label: 'Expiration Date',
+    fieldKey: 'expirationDate',
+    fieldType: 'date',
+    required: false,
+    order: 15,
+    section: 'optional',
+    builtin: true,
+    hidden: false,
+  },
+  {
+    label: 'Last maintenance',
+    fieldKey: 'lastMaintenance',
+    fieldType: 'date',
+    required: false,
+    order: 16,
+    section: 'optional',
+    builtin: true,
+    hidden: false,
+  },
+  {
+    label: 'Calibration date',
+    fieldKey: 'calibration',
+    fieldType: 'date',
+    required: false,
+    order: 17,
+    section: 'optional',
+    builtin: true,
+    hidden: false,
+  },
+  {
+    label: 'Manual URL',
+    fieldKey: 'manualUrl',
+    fieldType: 'text',
+    required: false,
+    order: 18,
+    section: 'optional',
+    builtin: true,
+    hidden: false,
+  },
+  {
+    label: 'Photo',
+    fieldKey: 'image',
+    fieldType: 'upload',
+    required: false,
+    order: 19,
+    section: 'optional',
+    builtin: true,
+    hidden: false,
+  },
+];
+
+const PROTECTED_FROM_HIDE = new Set(['name', 'category']);
+
+async function seedFieldDefinitionsIfEmpty() {
+  try {
+    const count = await FieldDefinition.countDocuments();
+    if (count > 0) return;
+    await FieldDefinition.insertMany(DEFAULT_FIELD_DEFINITIONS);
+    console.log('Seeded FieldDefinition collection with default form fields.');
+  } catch (err) {
+    console.error('FieldDefinition seed error:', err.message);
+  }
+}
+
+module.exports = {
+  seedFieldDefinitionsIfEmpty,
+  DEFAULT_FIELD_DEFINITIONS,
+  PROTECTED_FROM_HIDE,
+};

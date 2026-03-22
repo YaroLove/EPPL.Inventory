@@ -8,6 +8,7 @@ import SearchInvalid from './SearchInvalid.jsx';
 import { useSelector } from 'react-redux';
 
 import { useGetItemsQuery, useGetItemsBySupplierQuery } from '../../services/items.js';
+import { combinedItemTitle } from '../../utils/itemFormUtils.js';
 
 const StyledSpin = styled(Spin)`
   margin: 2rem;
@@ -26,10 +27,12 @@ const GenericItemsList = ({ category, supplier }) => {
   useEffect(() => {
     if (data) {
       if (searchInput) {
+        const q = searchInput.toLowerCase();
         setFoundItems(
-          data.filter((item) =>
-            item.name.toLowerCase().startsWith(searchInput.toLowerCase())
-          )
+          data.filter((item) => {
+            const title = combinedItemTitle(item).toLowerCase();
+            return title.includes(q);
+          })
         );
       } else {
         setFoundItems(data);
@@ -67,18 +70,21 @@ const GenericItemsList = ({ category, supplier }) => {
               : `/uploads/${item.image}`
             : null;
 
+          const displayTitle = combinedItemTitle(item) || item.name || 'Item';
+
           return (
             <StyledCard
               key={item._id}
               hoverable
               bordered={false}
               style={{
-                backgroundColor: isLow ? '#f8bdbd' : 'none',
+                backgroundColor: isLow ? '#fff5f5' : '#ffffff',
+                borderLeft: isLow ? '3px solid #ef4444' : undefined,
               }}>
               {imageSrc && (
                 <img
                   src={imageSrc}
-                  alt={item.name}
+                  alt={displayTitle}
                   style={{
                     width: '100%',
                     height: '180px',
@@ -88,7 +94,7 @@ const GenericItemsList = ({ category, supplier }) => {
                   }}
                 />
               )}
-              <h3>{item.name}</h3>
+              <h3>{displayTitle}</h3>
               {supplier && (
                 <p>
                   <b>Category:</b> {item.category}
@@ -105,7 +111,8 @@ const GenericItemsList = ({ category, supplier }) => {
               </p>
               {item.quantity !== undefined && (
                 <p>
-                  <b>Qty:</b> {item.quantity}
+                  <b>Qty:</b> {item.quantity}{' '}
+                  {item.quantityUnit || 'items'}
                 </p>
               )}
               {item.species && (
@@ -124,9 +131,9 @@ const GenericItemsList = ({ category, supplier }) => {
                 </p>
               )}
               <div style={{ display: 'flex' }}>
-                <UpdateItem id={item._id} category={item.category} />
+                <UpdateItem item={item} />
                 <DeleteModal
-                  name={item.name}
+                  name={displayTitle}
                   id={item._id}
                   category={item.category}
                 />

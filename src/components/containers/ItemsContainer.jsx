@@ -18,7 +18,7 @@ const Wrapper = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
   gap: 1.25rem;
 `;
 
@@ -34,15 +34,16 @@ const ItemsContainer = () => {
         <div
           style={{
             display: 'flex',
-            backgroundColor: 'rgba(255, 255, 255, 0.06)',
+            backgroundColor: '#ffffff',
             width: '100%',
-            justifyContent: 'center',
+            justifyContent: 'flex-start',
+            alignItems: 'center',
             flexWrap: 'wrap',
-            gap: '1rem',
-            padding: '0.75rem',
-            borderRadius: '18px',
-            border: '1px solid rgba(255, 255, 255, 0.08)',
-            backdropFilter: 'blur(12px)',
+            gap: '0.75rem',
+            padding: '0.75rem 1rem',
+            borderRadius: '14px',
+            border: '1px solid var(--border)',
+            boxShadow: 'var(--shadow-card)',
           }}>
           <AddItem />
           <SearchBar />

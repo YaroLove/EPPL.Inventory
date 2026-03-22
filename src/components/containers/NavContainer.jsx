@@ -22,16 +22,71 @@ import { useGetSuppliersQuery, useAddSupplierMutation } from '../../services/sup
 const { SubMenu } = Menu;
 
 const StyledMenu = styled(Menu)`
-  width: clamp(240px, 22vw, 320px);
-  min-height: calc(100vh - 3rem);
-  border-radius: 22px;
+  width: clamp(220px, 20vw, 280px);
+  min-height: calc(100vh - 2.5rem);
+  border-radius: 20px;
   padding: 1.25rem 0.75rem 1.5rem 0.75rem;
-  background: linear-gradient(160deg, rgba(15, 23, 42, 0.95) 0%, rgba(9, 14, 26, 0.9) 100%);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 20px 60px rgba(2, 8, 23, 0.5);
+  background: linear-gradient(175deg, #1a5c3a 0%, #14532d 100%);
+  border: none;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 0.15rem;
+
+  /* Menu items white text */
+  .ant-menu-item,
+  .ant-menu-submenu-title {
+    color: rgba(255, 255, 255, 0.8) !important;
+    border-radius: 12px !important;
+    margin: 2px 0 !important;
+    transition: background 0.15s ease, color 0.15s ease !important;
+  }
+
+  .ant-menu-item:hover,
+  .ant-menu-submenu-title:hover {
+    color: #ffffff !important;
+    background: rgba(255, 255, 255, 0.12) !important;
+  }
+
+  .ant-menu-item-selected {
+    background: rgba(255, 255, 255, 0.18) !important;
+    color: #ffffff !important;
+    font-weight: 600 !important;
+  }
+
+  .ant-menu-item .anticon,
+  .ant-menu-submenu-title .anticon {
+    color: inherit !important;
+  }
+
+  .ant-menu-sub {
+    background: transparent !important;
+  }
+
+  .ant-menu-sub .ant-menu-item {
+    padding-left: 36px !important;
+    font-size: 0.875rem !important;
+    color: rgba(255, 255, 255, 0.7) !important;
+  }
+
+  .ant-menu-sub .ant-menu-item:hover {
+    color: #ffffff !important;
+    background: rgba(255, 255, 255, 0.1) !important;
+  }
+
+  .ant-menu-sub .ant-menu-item-selected {
+    background: rgba(255, 255, 255, 0.16) !important;
+    color: #ffffff !important;
+  }
+
+  .ant-menu-submenu-arrow {
+    color: rgba(255, 255, 255, 0.5) !important;
+  }
+
+  .ant-menu-submenu-open > .ant-menu-submenu-title .ant-menu-submenu-arrow,
+  .ant-menu-submenu-title:hover .ant-menu-submenu-arrow {
+    color: rgba(255, 255, 255, 0.9) !important;
+  }
 
   @media (max-width: 1024px) {
     width: 100%;
@@ -40,33 +95,50 @@ const StyledMenu = styled(Menu)`
 `;
 
 const Title = styled.h1`
-  color: #e4e4e4;
-  margin: 0.5rem 1rem 1.5rem 1rem;
+  color: #ffffff;
+  margin: 0.5rem 0.75rem 1.5rem 0.75rem;
   font-family: 'Outfit', sans-serif;
   font-weight: 600;
-  letter-spacing: 0.08rem;
+  letter-spacing: 0.04rem;
+  cursor: pointer;
 `;
 
 const SignOutButton = styled(Button)`
-  background: rgba(255, 255, 255, 0.05);
-  color: #9ad7ff;
-  border: 1px solid rgba(154, 215, 255, 0.35);
-  margin: 1.5rem 1rem 0 1rem;
-  width: calc(100% - 2rem);
-  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: rgba(255, 255, 255, 0.9) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  margin: 1.5rem 0.75rem 0 0.75rem;
+  width: calc(100% - 1.5rem);
+  border-radius: 999px !important;
   align-self: center;
+  font-weight: 500 !important;
+  transition: all 0.2s ease !important;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.18) !important;
+    border-color: rgba(255, 255, 255, 0.5) !important;
+    color: #ffffff !important;
+  }
 
   @media (max-width: 1024px) {
-    width: calc(100% - 2rem);
+    width: calc(100% - 1.5rem);
   }
 `;
 
 const AddButton = styled(Button)`
-  margin: 0.25rem 0.75rem;
-  border-style: dashed;
-  opacity: 0.7;
+  margin: 0.25rem 0.5rem !important;
+  width: calc(100% - 1rem) !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px dashed rgba(255, 255, 255, 0.35) !important;
+  color: rgba(255, 255, 255, 0.75) !important;
+  border-radius: 8px !important;
+  font-size: 0.8rem !important;
+  transition: all 0.15s ease !important;
+
   &:hover {
-    opacity: 1;
+    background: rgba(255, 255, 255, 0.15) !important;
+    color: #ffffff !important;
+    border-color: rgba(255, 255, 255, 0.55) !important;
   }
 `;
 

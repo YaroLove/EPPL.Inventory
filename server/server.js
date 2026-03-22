@@ -18,6 +18,10 @@ console.log('Loading sessionController...');
 const sessionController = require('./controllers/sessionController');
 console.log('Routes loaded successfully');
 
+const mongoose = require('mongoose');
+require('./models/itemsModels');
+const { seedFieldDefinitionsIfEmpty } = require('./utils/seedFieldDefinitions');
+
 // app.use(express.static(path.resolve(__dirname, '../index.html')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -26,6 +30,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/items', itemsRouter);
 app.use('/categories', require('./routes/categories'));
 app.use('/suppliers', require('./routes/suppliers'));
+app.use('/field-definitions', require('./routes/fieldDefinitions'));
 app.use('/shopping', require('./routes/shoppingList'));
 app.use('/ai', require('./routes/ai'));
 app.use('/upload', require('./routes/upload'));
@@ -67,7 +72,17 @@ app.use((req, res) =>
 
 // Global Error Handler
 app.use(({ code, error }, req, res, next) => {
-  res.status(500).json({ error });
+  const status = code && code >= 400 && code < 600 ? code : 500;
+  res.status(status).json({ error: error?.message || error });
 });
+
+function runWhenDbReady(fn) {
+  if (mongoose.connection.readyState === 1) {
+    fn();
+  } else {
+    mongoose.connection.once('open', fn);
+  }
+}
+runWhenDbReady(() => seedFieldDefinitionsIfEmpty());
 
 app.listen(port, () => console.log(`Listening on port ${port}`));

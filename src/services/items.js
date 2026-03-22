@@ -19,6 +19,9 @@ export const itemsApi = createApi({
       query: (supplier) => `by-supplier/${supplier}`,
       providesTags: (result, error, supplier) => [{ type: 'Items', id: `supplier-${supplier}` }],
     }),
+    getDistinctValues: builder.query({
+      query: (field) => `distinct/${encodeURIComponent(field)}`,
+    }),
     addItem: builder.mutation({
       query({ category, ...body }) {
         return {
@@ -55,6 +58,7 @@ export const {
   useGetItemsQuery,
   useGetAllItemsQuery,
   useGetItemsBySupplierQuery,
+  useGetDistinctValuesQuery,
   useAddItemMutation,
   useDeleteItemMutation,
   useUpdateItemMutation,

@@ -9,6 +9,7 @@ import { shoppingApi } from '../services/shopping';
 import { aiApi } from '../services/ai';
 import { categoriesApi } from '../services/categories';
 import { suppliersApi } from '../services/suppliers';
+import { fieldDefinitionsApi } from '../services/fieldDefinitions';
 
 export const store = configureStore({
   reducer: {
@@ -21,6 +22,7 @@ export const store = configureStore({
     [aiApi.reducerPath]: aiApi.reducer,
     [categoriesApi.reducerPath]: categoriesApi.reducer,
     [suppliersApi.reducerPath]: suppliersApi.reducer,
+    [fieldDefinitionsApi.reducerPath]: fieldDefinitionsApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
@@ -28,7 +30,8 @@ export const store = configureStore({
       .concat(shoppingApi.middleware)
       .concat(aiApi.middleware)
       .concat(categoriesApi.middleware)
-      .concat(suppliersApi.middleware),
+      .concat(suppliersApi.middleware)
+      .concat(fieldDefinitionsApi.middleware),
 });
 
 setupListeners(store.dispatch);
