@@ -1,28 +1,48 @@
 import React, { useState, useEffect } from 'react';
 import { Spin } from 'antd';
+import { HeartFilled, HeartOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 import StyledCard from './StyledCard.jsx';
 import DeleteModal from '../Modals/DeleteModal.jsx';
 import UpdateItem from '../Modals/UpdateItem.jsx';
 import SearchInvalid from './SearchInvalid.jsx';
-import { useSelector } from 'react-redux';
+import ItemDetailModal from './ItemDetailModal.jsx';
+import { useSelector, useDispatch } from 'react-redux';
+import { updateFavorites } from '../../loginSlice.js';
 
 import { useGetItemsQuery, useGetItemsBySupplierQuery } from '../../services/items.js';
+import { useAddFavoriteMutation, useRemoveFavoriteMutation } from '../../services/userApi.js';
 import { combinedItemTitle } from '../../utils/itemFormUtils.js';
 
 const StyledSpin = styled(Spin)`
   margin: 2rem;
 `;
 
-const GenericItemsList = ({ category, supplier }) => {
+const GenericItemsList = ({ category, supplier, selectedIds, onToggleSelect }) => {
   const categoryResult = useGetItemsQuery(category, { skip: !category });
   const supplierResult = useGetItemsBySupplierQuery(supplier, { skip: !supplier });
 
   const activeResult = category ? categoryResult : supplierResult;
   const { data, error, isLoading, isSuccess, isError } = activeResult;
 
+  const dispatch = useDispatch();
   const searchInput = useSelector((state) => state.filter.filter);
+  const favorites = useSelector((state) => state.login.favorites || []);
   const [foundItems, setFoundItems] = useState(null);
+  const [detailItem, setDetailItem] = useState(null);
+  const [addFavorite] = useAddFavoriteMutation();
+  const [removeFavorite] = useRemoveFavoriteMutation();
+
+  const toggleFavorite = async (e, itemId, isFav) => {
+    e.stopPropagation();
+    if (isFav) {
+      await removeFavorite(itemId);
+      dispatch(updateFavorites(favorites.filter((id) => id !== itemId)));
+    } else {
+      await addFavorite(itemId);
+      dispatch(updateFavorites([...favorites, itemId]));
+    }
+  };
 
   useEffect(() => {
     if (data) {
@@ -31,7 +51,17 @@ const GenericItemsList = ({ category, supplier }) => {
         setFoundItems(
           data.filter((item) => {
             const title = combinedItemTitle(item).toLowerCase();
-            return title.includes(q);
+            const catalog = (item.catalog || '').toLowerCase();
+            const supplier = (item.supplier || '').toLowerCase();
+            const description = (item.description || '').toLowerCase();
+            const location = (item.location || '').toLowerCase();
+            return (
+              title.includes(q) ||
+              catalog.includes(q) ||
+              supplier.includes(q) ||
+              description.includes(q) ||
+              location.includes(q)
+            );
           })
         );
       } else {
@@ -61,6 +91,11 @@ const GenericItemsList = ({ category, supplier }) => {
       {isSuccess && displayItems.length === 0 && (
         <SearchInvalid />
       )}
+      <ItemDetailModal
+        item={detailItem}
+        visible={!!detailItem}
+        onClose={() => setDetailItem(null)}
+      />
       {isSuccess &&
         displayItems.map((item) => {
           const isLow = item.quantity < (item.minStock || 5);
@@ -71,6 +106,8 @@ const GenericItemsList = ({ category, supplier }) => {
             : null;
 
           const displayTitle = combinedItemTitle(item) || item.name || 'Item';
+          const isFav = favorites.includes(item._id);
+          const isSelected = selectedIds?.has(item._id);
 
           return (
             <StyledCard
@@ -80,7 +117,36 @@ const GenericItemsList = ({ category, supplier }) => {
               style={{
                 backgroundColor: isLow ? '#fff5f5' : '#ffffff',
                 borderLeft: isLow ? '3px solid #ef4444' : undefined,
+                cursor: 'pointer',
+                position: 'relative',
+                outline: isSelected ? '2px solid var(--brand-green)' : undefined,
+              }}
+              onClick={() => {
+                if (onToggleSelect) onToggleSelect(item._id);
+                else setDetailItem(item);
               }}>
+              {isSelected && (
+                <div
+                  style={{
+                    position: 'absolute', top: 8, left: 8, width: 20, height: 20,
+                    background: 'var(--brand-green)', borderRadius: 4,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    color: '#fff', fontSize: 12, zIndex: 2,
+                  }}>
+                  ✓
+                </div>
+              )}
+              {isFav ? (
+                <HeartFilled
+                  style={{ position: 'absolute', top: 14, right: 14, fontSize: 20, color: '#ef4444', zIndex: 2 }}
+                  onClick={(e) => toggleFavorite(e, item._id, true)}
+                />
+              ) : (
+                <HeartOutlined
+                  style={{ position: 'absolute', top: 14, right: 14, fontSize: 20, color: '#d1d5db', zIndex: 2 }}
+                  onClick={(e) => toggleFavorite(e, item._id, false)}
+                />
+              )}
               {imageSrc && (
                 <img
                   src={imageSrc}
@@ -91,6 +157,9 @@ const GenericItemsList = ({ category, supplier }) => {
                     objectFit: 'cover',
                     borderRadius: '12px',
                     marginBottom: '0.75rem',
+                  }}
+                  onError={(e) => {
+                    e.currentTarget.style.display = 'none';
                   }}
                 />
               )}
@@ -130,7 +199,9 @@ const GenericItemsList = ({ category, supplier }) => {
                   <b>Location:</b> {item.location}
                 </p>
               )}
-              <div style={{ display: 'flex' }}>
+              <div
+                style={{ display: 'flex' }}
+                onClick={(e) => e.stopPropagation()}>
                 <UpdateItem item={item} />
                 <DeleteModal
                   name={displayTitle}

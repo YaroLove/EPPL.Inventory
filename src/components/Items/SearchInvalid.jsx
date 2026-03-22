@@ -15,14 +15,12 @@ const Wrapper = styled.div`
   font-family: 'Outfit', sans-serif;
 `;
 const MainText = styled.p`
-  color: #e6edf7;
-  /* margin-top: 0.5rem; */
+  color: var(--text-1, #1a1a1a);
   margin-bottom: 0;
   font-size: 1.5rem;
-  /* line-height: 0.5rem; */
 `;
 const SubText = styled.p`
-  color: #a8b3cf;
+  color: var(--text-2, #6b7280);
   font-size: 1rem;
 `;
 

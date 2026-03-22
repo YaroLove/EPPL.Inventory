@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import { setLogin } from '../../loginSlice';
-import { Button } from 'antd';
-import LoginOAuth from './LoginOAuth.jsx';
+import { Form, Input, Button, message, Alert } from 'antd';
+import { MailOutlined, LockOutlined } from '@ant-design/icons';
+import { setCurrentUser } from '../../loginSlice';
 
 const StyledImage = styled.img`
   width: 55vw;
@@ -77,7 +77,7 @@ const Card = styled.div`
   flex-direction: column;
   align-items: center;
   width: 85%;
-  max-width: 400px;
+  max-width: 420px;
 
   @media (max-width: 900px) {
     width: 100%;
@@ -100,62 +100,103 @@ const BrandIcon = styled.div`
   box-shadow: 0 4px 14px rgba(22, 163, 74, 0.35);
 `;
 
-const GuestLoginBtn = styled(Button)`
+const SubmitBtn = styled(Button)`
   width: 100%;
   height: 44px;
-  margin-top: 1.25rem;
   border-radius: 999px !important;
-  font-weight: 500;
-  border: 1px solid var(--border) !important;
-  color: var(--text-2) !important;
-  background: var(--surface) !important;
+  font-weight: 600;
+  font-size: 0.95rem;
+  background: var(--brand-green) !important;
+  border-color: var(--brand-green) !important;
+  color: #fff !important;
+  margin-top: 0.5rem;
 
   &:hover {
-    border-color: var(--brand-green) !important;
-    color: var(--brand-green) !important;
+    opacity: 0.9;
   }
-`;
-
-const StyledP = styled.p`
-  color: var(--text-3);
-  margin: 1.25rem 0;
-  font-size: 0.85rem;
-  position: relative;
-  width: 100%;
-  text-align: center;
-
-  &:before, &:after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    width: 35%;
-    height: 1px;
-    background: var(--border);
-  }
-  &:before { left: 0; }
-  &:after { right: 0; }
 `;
 
 const LoginContainer = () => {
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleLogin = () => {
-    dispatch(setLogin(true));
+  const handleLogin = async (values) => {
+    setError('');
+    setLoading(true);
+    try {
+      const res = await fetch('/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: values.email, password: values.password }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.error || 'Login failed');
+        return;
+      }
+      dispatch(setCurrentUser(data));
+    } catch (err) {
+      setError('Network error. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <Wrapper>
-      <StyledImage src="https://6983befb32fdc2721e45d6ac.imgix.net/EPPL/Inventory/Main_Picture.jpg" alt="Lab environment" />
+      <StyledImage
+        src="https://res.cloudinary.com/dkftvbtmf/image/upload/v1774154648/samples/waves.png"
+        alt="Lab environment"
+      />
       <LoginWrapper>
         <Title>EPPL Inventory</Title>
         <SubTitle>precision • efficiency • control</SubTitle>
         <Card>
-          <BrandIcon> EPPL </BrandIcon>
-          <LoginOAuth />
-          <StyledP>or</StyledP>
-          <GuestLoginBtn onClick={handleLogin}>
-            Sign In as a Guest
-          </GuestLoginBtn>
+          <BrandIcon>EPPL</BrandIcon>
+          {error && (
+            <Alert
+              message={error}
+              type="error"
+              showIcon
+              style={{ width: '100%', marginBottom: '1rem' }}
+            />
+          )}
+          <Form
+            layout="vertical"
+            onFinish={handleLogin}
+            style={{ width: '100%' }}
+            requiredMark={false}
+          >
+            <Form.Item
+              name="email"
+              rules={[{ required: true, message: 'Please enter your email' }]}
+            >
+              <Input
+                prefix={<MailOutlined style={{ color: 'var(--text-3)' }} />}
+                placeholder="Email address"
+                size="large"
+                type="email"
+                autoComplete="email"
+              />
+            </Form.Item>
+            <Form.Item
+              name="password"
+              rules={[{ required: true, message: 'Please enter your password' }]}
+            >
+              <Input.Password
+                prefix={<LockOutlined style={{ color: 'var(--text-3)' }} />}
+                placeholder="Password"
+                size="large"
+                autoComplete="current-password"
+              />
+            </Form.Item>
+            <Form.Item style={{ marginBottom: 0 }}>
+              <SubmitBtn type="primary" htmlType="submit" loading={loading}>
+                Sign In
+              </SubmitBtn>
+            </Form.Item>
+          </Form>
         </Card>
       </LoginWrapper>
     </Wrapper>

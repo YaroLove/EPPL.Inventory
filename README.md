@@ -1,4 +1,4 @@
-<img width="423" alt="Storeroom Logo" src="https://6983befb32fdc2721e45d6ac.imgix.net/EPPL/Inventory/Logo_EPPL.jpeg">
+<img width="423" alt="EPPL Logo" src="https://res.cloudinary.com/dkftvbtmf/image/upload/v1774156055/Logo_eppl_snhgvc.jpg">
 
 ## The problem
 

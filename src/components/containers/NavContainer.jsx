@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { setDisplay } from './displaySlice';
-import { setLogin } from '../../loginSlice';
+import { clearCurrentUser } from '../../loginSlice';
 import { Menu, Avatar, Affix, Button, Input, Modal, message } from 'antd';
 import {
   ShoppingCartOutlined,
@@ -9,11 +9,11 @@ import {
   UserOutlined,
   DatabaseOutlined,
   PaperClipOutlined,
-  BellOutlined,
   HeartOutlined,
   DashboardOutlined,
   PlusOutlined,
   TagOutlined,
+  HistoryOutlined,
 } from '@ant-design/icons';
 import styled from 'styled-components';
 import { useGetCategoriesQuery, useAddCategoryMutation } from '../../services/categories';
@@ -33,7 +33,6 @@ const StyledMenu = styled(Menu)`
   flex-direction: column;
   gap: 0.15rem;
 
-  /* Menu items white text */
   .ant-menu-item,
   .ant-menu-submenu-title {
     color: rgba(255, 255, 255, 0.8) !important;
@@ -142,9 +141,9 @@ const AddButton = styled(Button)`
   }
 `;
 
-const NavContainer = (props) => {
+const NavContainer = () => {
   const dispatch = useDispatch();
-  const currentUser = useSelector((state) => state.user.user);
+  const displayName = useSelector((state) => state.login.displayName);
 
   const [current, setCurrent] = useState('dashboard');
   const [categoryModalVisible, setCategoryModalVisible] = useState(false);
@@ -159,18 +158,18 @@ const NavContainer = (props) => {
   const handleClick = (e) => {
     setCurrent(e.key);
 
-    if (e.key === 'dashboard' || e.key === 'default' || e.key === 'favorites') {
+    if (['dashboard', 'default', 'favorites', 'settings', 'history'].includes(e.key)) {
       dispatch(setDisplay(e.key));
       return;
     }
 
-    const matchedCategory = categories.find(c => c.name === e.key);
+    const matchedCategory = categories.find((c) => c.name === e.key);
     if (matchedCategory) {
       dispatch(setDisplay({ type: 'category', value: matchedCategory.name }));
       return;
     }
 
-    const matchedSupplier = suppliers.find(s => `supplier-${s.name}` === e.key);
+    const matchedSupplier = suppliers.find((s) => `supplier-${s.name}` === e.key);
     if (matchedSupplier) {
       dispatch(setDisplay({ type: 'supplier', value: matchedSupplier.name }));
       return;
@@ -201,28 +200,32 @@ const NavContainer = (props) => {
     }
   };
 
-  const handleSignOut = () => {
-    var auth2 = gapi.auth2.getAuthInstance();
-    auth2.signOut().then(function () {
-      console.log('User signed out.');
-    });
-    dispatch(setLogin(false));
+  const handleSignOut = async () => {
+    try {
+      await fetch('/auth/logout', { method: 'POST' });
+    } catch (_) {}
+    dispatch(clearCurrentUser());
   };
 
   return (
     <>
       <Affix offsetTop={0}>
         <StyledMenu
-          theme={'dark'}
+          theme="dark"
           onClick={handleClick}
           defaultOpenKeys={['sub1', 'sub2']}
           selectedKeys={[current]}
           mode="inline">
           <Title
             onClick={() => {
-              dispatch(setDisplay('default'));
+              setCurrent('allitems');
+              dispatch(setDisplay({ type: 'allitems', value: 'all' }));
             }}>
-              <img src="https://6983befb32fdc2721e45d6ac.imgix.net/EPPL/Inventory/WhiteVersio_LogoMakr-300dpi.png" style={{ width: '200px', height: 'auto'}} alt="EPPL Logo" />
+            <img
+              src="https://res.cloudinary.com/dkftvbtmf/image/upload/v1774156055/Logo_eppl_snhgvc.jpg"
+              style={{ width: '200px', height: 'auto' }}
+              alt="EPPL Logo"
+            />
           </Title>
           <Menu.Item key="dashboard" icon={<DashboardOutlined />}>
             Dashboard
@@ -265,18 +268,18 @@ const NavContainer = (props) => {
               Add Supplier
             </AddButton>
           </SubMenu>
-          <SubMenu icon={<UserOutlined />} key="sub4" title={currentUser}>
+          <Menu.Item key="history" icon={<HistoryOutlined />}>
+            History
+          </Menu.Item>
+          <SubMenu icon={<UserOutlined />} key="sub4" title={displayName || 'Account'}>
             <Menu.Item icon={<HeartOutlined />} key="favorites">
               Favorites
             </Menu.Item>
-            <Menu.Item icon={<SettingOutlined />} key="10">
+            <Menu.Item icon={<SettingOutlined />} key="settings">
               Settings
             </Menu.Item>
-            <Menu.Item icon={<BellOutlined />} key="11">
-              Reminders
-            </Menu.Item>
           </SubMenu>
-          <SignOutButton href="/" shape="round" onClick={handleSignOut}>
+          <SignOutButton shape="round" onClick={handleSignOut}>
             Sign out
           </SignOutButton>
         </StyledMenu>
@@ -287,8 +290,7 @@ const NavContainer = (props) => {
         visible={categoryModalVisible}
         onOk={handleAddCategory}
         onCancel={() => setCategoryModalVisible(false)}
-        okText="Add"
-      >
+        okText="Add">
         <Input
           placeholder="Category name"
           value={newName}
@@ -303,8 +305,7 @@ const NavContainer = (props) => {
         visible={supplierModalVisible}
         onOk={handleAddSupplier}
         onCancel={() => setSupplierModalVisible(false)}
-        okText="Add"
-      >
+        okText="Add">
         <Input
           placeholder="Supplier name"
           value={newName}

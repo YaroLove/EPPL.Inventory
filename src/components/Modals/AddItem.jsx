@@ -157,6 +157,16 @@ const AddItem = () => {
   const validateRequired = () => {
     for (const d of sortedRequired) {
       if (!d.required) continue;
+
+      // Category value lives in `category` state, not in `values`
+      if (d.fieldType === 'select_category') {
+        if (!category || String(category).trim() === '') {
+          message.warning(`Please fill: ${d.label}`);
+          return false;
+        }
+        continue;
+      }
+
       if (d.fieldType === 'quantity_with_unit') {
         if (values.quantity === undefined || values.quantity === null || values.quantity === '') {
           message.warning(`Please fill: Quantity`);
