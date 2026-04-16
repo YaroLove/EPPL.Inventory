@@ -51,9 +51,9 @@ authController.logout = async (req, res) => {
     const cookieId = req.cookies?.ssid;
     if (cookieId) await Session.deleteOne({ cookieId });
     res.clearCookie('ssid');
-    res.sendStatus(200);
+    res.status(200).json({ success: true });
   } catch (err) {
-    res.sendStatus(500);
+    res.status(500).json({ error: 'Logout failed' });
   }
 };
 

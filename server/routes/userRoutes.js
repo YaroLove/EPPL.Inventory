@@ -72,7 +72,7 @@ router.post('/favorites/:itemId', async (req, res) => {
     await User.findByIdAndUpdate(req.user._id, {
       $addToSet: { favorites: req.params.itemId },
     });
-    res.sendStatus(200);
+    res.status(200).json({ success: true });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -83,7 +83,7 @@ router.delete('/favorites/:itemId', async (req, res) => {
     await User.findByIdAndUpdate(req.user._id, {
       $pull: { favorites: req.params.itemId },
     });
-    res.sendStatus(200);
+    res.status(200).json({ success: true });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

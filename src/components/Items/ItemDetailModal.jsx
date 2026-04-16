@@ -44,7 +44,7 @@ const ItemDetailModal = ({ item, visible, onClose }) => {
           )}
         </span>
       }
-      open={visible}
+      visible={visible}
       onCancel={onClose}
       footer={null}
       width={680}

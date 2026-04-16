@@ -12,7 +12,7 @@ router.post('/', suppliersController.add, (req, res) => {
 });
 
 router.delete('/:id', suppliersController.delete, (req, res) => {
-  res.sendStatus(200);
+  res.status(200).json({ success: true });
 });
 
 module.exports = router;

@@ -16,7 +16,7 @@ router.put('/:id', fieldDefinitionsController.update, (req, res) => {
 });
 
 router.delete('/:id', fieldDefinitionsController.delete, (req, res) => {
-  res.sendStatus(200);
+  res.status(200).json({ success: true });
 });
 
 module.exports = router;

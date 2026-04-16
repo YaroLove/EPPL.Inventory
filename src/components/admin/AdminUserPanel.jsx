@@ -107,7 +107,7 @@ const AdminUserPanel = () => {
 
       <Modal
         title="Add New User"
-        open={modalVisible}
+        visible={modalVisible}
         onOk={handleCreate}
         onCancel={() => { setModalVisible(false); form.resetFields(); }}
         okText="Create User"

@@ -16,7 +16,7 @@ router.put('/:id', shoppingListController.updateItem, (req, res) => {
 });
 
 router.delete('/:id', shoppingListController.deleteItem, (req, res) => {
-    res.sendStatus(200);
+    res.status(200).json({ success: true });
 });
 
 module.exports = router;

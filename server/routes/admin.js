@@ -50,7 +50,7 @@ router.delete('/users/:id', async (req, res) => {
       return res.status(400).json({ error: 'Cannot delete your own account' });
     }
     await User.findByIdAndDelete(req.params.id);
-    res.sendStatus(200);
+    res.status(200).json({ success: true });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

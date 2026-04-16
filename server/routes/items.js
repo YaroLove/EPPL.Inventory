@@ -20,15 +20,15 @@ router.get('/:category', itemsController.getItems, (req, res) => {
 });
 
 router.post('/:category', itemsController.addItem, (req, res) => {
-  res.sendStatus(200);
+  res.status(200).json({ success: true });
 });
 
 router.delete('/:category/:id', itemsController.deleteItem, (req, res) => {
-  res.sendStatus(200);
+  res.status(200).json({ success: true });
 });
 
 router.put('/:category/:id', itemsController.updateItem, (req, res) => {
-  res.sendStatus(200);
+  res.status(200).json({ success: true });
 });
 
 module.exports = router;
