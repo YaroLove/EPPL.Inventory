@@ -25,6 +25,35 @@ const Wrapper = styled.div`
   flex-direction: column;
   align-items: stretch;
   gap: 1.25rem;
+
+  @media (max-width: 768px) {
+    gap: 0.75rem;
+    padding: 0.5rem;
+  }
+`;
+
+const Toolbar = styled.div`
+  display: flex;
+  background-color: #ffffff;
+  width: 100%;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-card);
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 0.6rem 0.75rem;
+    gap: 0.5rem;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+  }
 `;
 
 // Returns true for views where the Export toolbar should appear
@@ -44,23 +73,8 @@ const ItemsContainer = () => {
   const [selectedIds, setSelectedIds] = useState(new Set());
   const [pendingSelectAll, setPendingSelectAll] = useState(false);
 
-  // Reset selection when the view changes
-  useEffect(() => {
-    setSelectedIds(new Set());
-    setPendingSelectAll(false);
-  }, [displayType, displayValue]);
-
-  // If "Select All" was clicked before data loaded, fulfil it once items arrive
-  useEffect(() => {
-    if (pendingSelectAll && currentItems.length > 0) {
-      setSelectedIds(new Set(currentItems.map((i) => i._id)));
-      setPendingSelectAll(false);
-    }
-  }, [currentItems, pendingSelectAll]);
-
   const showExport = isExportableView(displayType, displayValue);
 
-  // Fetch data for export "Select All" feature
   const catData  = useGetItemsQuery(displayValue, { skip: displayType !== 'category' });
   const supData  = useGetItemsBySupplierQuery(displayValue, { skip: displayType !== 'supplier' });
   const allData  = useGetAllItemsQuery(undefined, { skip: displayType !== 'allitems' });
@@ -69,6 +83,18 @@ const ItemsContainer = () => {
     displayType === 'category' ? (catData.data || []) :
     displayType === 'supplier' ? (supData.data || []) :
     displayType === 'allitems' ? (allData.data || []) : [];
+
+  useEffect(() => {
+    setSelectedIds(new Set());
+    setPendingSelectAll(false);
+  }, [displayType, displayValue]);
+
+  useEffect(() => {
+    if (pendingSelectAll && currentItems.length > 0) {
+      setSelectedIds(new Set(currentItems.map((i) => i._id)));
+      setPendingSelectAll(false);
+    }
+  }, [currentItems, pendingSelectAll]);
 
   const exportLabel =
     displayType === 'category' ? displayValue :
@@ -99,20 +125,7 @@ const ItemsContainer = () => {
   return (
     <Wrapper>
       <Affix offsetTop={0}>
-        <div
-          style={{
-            display: 'flex',
-            backgroundColor: '#ffffff',
-            width: '100%',
-            justifyContent: 'flex-start',
-            alignItems: 'center',
-            flexWrap: 'wrap',
-            gap: '0.75rem',
-            padding: '0.75rem 1rem',
-            borderRadius: '14px',
-            border: '1px solid var(--border)',
-            boxShadow: 'var(--shadow-card)',
-          }}>
+        <Toolbar>
           <AddItem />
           <SearchBar />
           {showExport && (
@@ -124,7 +137,7 @@ const ItemsContainer = () => {
               exportLabel={exportLabel}
             />
           )}
-        </div>
+        </Toolbar>
       </Affix>
 
       {displayType === 'page' && displayValue === 'default'    && <DefaultPage />}

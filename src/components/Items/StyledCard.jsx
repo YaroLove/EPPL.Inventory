@@ -43,6 +43,12 @@ const StyledCard = styled(Card)`
     color: var(--text-1) !important;
     font-weight: 500;
   }
+
+  @media (max-width: 768px) {
+    flex: 1 1 100%;
+    max-width: 100%;
+    margin: 0;
+  }
 `;
 
 export default StyledCard;

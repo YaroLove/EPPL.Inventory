@@ -12,10 +12,8 @@ const StyledImage = styled.img`
   transition: all 0.5s ease-in-out;
   border-radius: 0 24px 24px 0;
 
-  @media (max-width: 900px) {
-    width: 100%;
-    height: 40vh;
-    border-radius: 0 0 24px 24px;
+  @media (max-width: 768px) {
+    display: none;
   }
 `;
 
@@ -26,10 +24,11 @@ const Wrapper = styled.div`
   background: var(--bg-page);
   overflow: hidden;
 
-  @media (max-width: 900px) {
+  @media (max-width: 768px) {
     flex-direction: column;
     height: auto;
     min-height: 100vh;
+    justify-content: center;
   }
 `;
 
@@ -42,8 +41,10 @@ const LoginWrapper = styled.div`
   padding: 2.5rem;
   background: var(--bg-page);
 
-  @media (max-width: 900px) {
+  @media (max-width: 768px) {
     width: 100%;
+    padding: 1.5rem;
+    min-height: 100vh;
   }
 `;
 
@@ -79,9 +80,10 @@ const Card = styled.div`
   width: 85%;
   max-width: 420px;
 
-  @media (max-width: 900px) {
+  @media (max-width: 768px) {
     width: 100%;
     max-width: 420px;
+    padding: 2rem 1.5rem;
   }
 `;
 

@@ -383,7 +383,8 @@ const AddItem = () => {
         visible={visible}
         onOk={handleSubmit}
         onCancel={() => setVisible(false)}
-        width={900}
+        width="90vw"
+        style={{ maxWidth: 900 }}
       >
         <Form labelCol={{ span: 0 }} wrapperCol={{ span: 24 }} layout="vertical" size="default">
           <div style={{ marginBottom: 16 }}>

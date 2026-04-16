@@ -518,12 +518,12 @@ body {
 
 /* ─── Responsive ───────────────────────────────────────────────── */
 
-@media (max-width: 1024px) {
+@media (max-width: 768px) {
   .App {
     flex-direction: column;
     align-items: stretch;
-    gap: 1rem;
-    padding: 1rem;
+    gap: 0;
+    padding: 0;
   }
 
   .inventory-search-wrapper {
@@ -533,11 +533,6 @@ body {
 }
 
 @media (max-width: 640px) {
-  .App {
-    gap: 0.75rem;
-    padding: 0.75rem;
-  }
-
   .inventory-search {
     --search-height: 40px;
   }

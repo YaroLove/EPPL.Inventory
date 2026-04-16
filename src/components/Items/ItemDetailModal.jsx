@@ -47,7 +47,8 @@ const ItemDetailModal = ({ item, visible, onClose }) => {
       visible={visible}
       onCancel={onClose}
       footer={null}
-      width={680}
+      width="90vw"
+      style={{ maxWidth: 680 }}
       bodyStyle={{ paddingTop: '1rem' }}
     >
       {imageSrc && (

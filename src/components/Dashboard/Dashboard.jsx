@@ -13,6 +13,10 @@ const DashboardWrapper = styled.div`
   padding: 2rem 2.5rem;
   width: 100%;
   background-color: transparent;
+
+  @media (max-width: 768px) {
+    padding: 1rem;
+  }
 `;
 
 const StyledCard = styled(Card)`
@@ -139,7 +143,7 @@ const Dashboard = () => {
             <Title level={2} style={{ marginBottom: '1.5rem', fontWeight: 800, color: 'var(--text-1)' }}>Overview</Title>
 
             <Row gutter={[20, 20]}>
-                <Col xs={24} md={8}>
+                <Col xs={24} sm={12} lg={8}>
                     <StatCard accent="var(--brand-green)">
                         <Statistic
                             title="Total Inventory"
@@ -148,7 +152,7 @@ const Dashboard = () => {
                         />
                     </StatCard>
                 </Col>
-                <Col xs={24} md={8}>
+                <Col xs={24} sm={12} lg={8}>
                     <StatCard accent="var(--danger)">
                         <Statistic
                             title="Low Stock"
@@ -158,7 +162,7 @@ const Dashboard = () => {
                         />
                     </StatCard>
                 </Col>
-                <Col xs={24} md={8}>
+                <Col xs={24} sm={12} lg={8}>
                     <StatCard accent="var(--warning)">
                         <Statistic
                             title="Expiring / Maint."
