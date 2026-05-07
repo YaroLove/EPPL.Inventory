@@ -109,6 +109,26 @@ const AddItem = () => {
   }, [visible, categories, category]);
 
   const handleUpload = (info) => {
+    // #region agent log
+    fetch('http://127.0.0.1:7619/ingest/c9e6356f-19aa-4b37-98fe-6ba91e944204', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Debug-Session-Id': '39af4b' },
+      body: JSON.stringify({
+        sessionId: '39af4b',
+        runId: 'pre',
+        hypothesisId: 'H3',
+        location: 'AddItem.jsx:handleUpload',
+        message: 'upload_change',
+        data: {
+          status: info.file.status,
+          name: info.file.name,
+          response: info.file.response,
+          error: info.file.error ? String(info.file.error) : undefined,
+        },
+        timestamp: Date.now(),
+      }),
+    }).catch(() => {});
+    // #endregion
     if (info.file.status === 'done') {
       message.success(`${info.file.name} file uploaded successfully`);
       const path = info.file.response?.filePath || '';
@@ -212,10 +232,44 @@ const AddItem = () => {
 
     try {
       await addItem(body).unwrap();
+      // #region agent log
+      fetch('http://127.0.0.1:7619/ingest/c9e6356f-19aa-4b37-98fe-6ba91e944204', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-Debug-Session-Id': '39af4b' },
+        body: JSON.stringify({
+          sessionId: '39af4b',
+          runId: 'pre',
+          hypothesisId: 'H2',
+          location: 'AddItem.jsx:handleSubmit',
+          message: 'add_item_ok',
+          data: { category },
+          timestamp: Date.now(),
+        }),
+      }).catch(() => {});
+      // #endregion
       message.success('Item added successfully!');
       setVisible(false);
       resetForm();
     } catch (err) {
+      // #region agent log
+      fetch('http://127.0.0.1:7619/ingest/c9e6356f-19aa-4b37-98fe-6ba91e944204', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-Debug-Session-Id': '39af4b' },
+        body: JSON.stringify({
+          sessionId: '39af4b',
+          runId: 'pre',
+          hypothesisId: 'H2',
+          location: 'AddItem.jsx:handleSubmit',
+          message: 'add_item_error',
+          data: {
+            status: err?.status,
+            data: err?.data,
+            originalStatus: err?.originalStatus,
+          },
+          timestamp: Date.now(),
+        }),
+      }).catch(() => {});
+      // #endregion
       console.error(err);
       const serverMsg = err?.data?.error || err?.error || err?.message;
       message.error(serverMsg ? `Failed to add item: ${serverMsg}` : 'Failed to add item.');
