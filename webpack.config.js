@@ -57,8 +57,25 @@ module.exports = {
       publicPath: '/build',
       directory: path.resolve(__dirname, 'public'),
     },
-    proxy: {
-      '/': 'http://localhost:3000',
-    },
+    proxy: [
+      {
+        context: [
+          '/auth',
+          '/items',
+          '/categories',
+          '/suppliers',
+          '/field-definitions',
+          '/shopping',
+          '/ai',
+          '/user',
+          '/admin',
+          '/history',
+          '/upload',
+          '/uploads',
+          '/signup',
+        ],
+        target: 'http://localhost:3000',
+      },
+    ],
   },
 };

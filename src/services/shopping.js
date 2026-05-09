@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 export const shoppingApi = createApi({
     reducerPath: 'shopping',
-    baseQuery: fetchBaseQuery({ baseUrl: '/shopping/' }),
+    baseQuery: fetchBaseQuery({ baseUrl: '/shopping/', credentials: 'include' }),
     tagTypes: ['ShoppingItem'],
     endpoints: (builder) => ({
         getShoppingList: builder.query({

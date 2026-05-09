@@ -20,6 +20,7 @@ require('./models/itemsModels');
 const { seedFieldDefinitionsIfEmpty } = require('./utils/seedFieldDefinitions');
 const { seedAdmin } = require('./utils/seedAdmin');
 const requireAuth = require('./middleware/requireAuth');
+const Session = require('./models/sessionModel');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -81,6 +82,11 @@ function runWhenDbReady(fn) {
 }
 
 runWhenDbReady(async () => {
+  try {
+    await Session.syncIndexes();
+  } catch (e) {
+    console.warn('Session index sync:', e.message);
+  }
   await seedFieldDefinitionsIfEmpty();
   await seedAdmin();
 });

@@ -130,6 +130,7 @@ const LoginContainer = () => {
       const res = await fetch('/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({ email: values.email, password: values.password }),
       });
       const data = await res.json();

@@ -15,7 +15,7 @@ function App() {
 
   // Restore session on page load
   useEffect(() => {
-    fetch('/auth/me')
+    fetch('/auth/me', { credentials: 'include' })
       .then((r) => (r.ok ? r.json() : null))
       .then((user) => {
         if (user) dispatch(setCurrentUser(user));

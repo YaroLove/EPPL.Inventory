@@ -4,6 +4,7 @@ export const fieldDefinitionsApi = createApi({
   reducerPath: 'fieldDefinitions',
   baseQuery: fetchBaseQuery({
     baseUrl: '/field-definitions/',
+    credentials: 'include',
   }),
   tagTypes: ['FieldDefinition'],
   endpoints: (builder) => ({

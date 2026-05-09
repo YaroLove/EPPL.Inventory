@@ -31,7 +31,8 @@ authController.login = async (req, res, next) => {
     if (!match) return next({ code: 401, error: 'Invalid email or password' });
 
     const cookieId = crypto.randomUUID();
-    await Session.create({ cookieId, userId: user._id });
+    const now = new Date();
+    await Session.create({ cookieId, userId: user._id, lastAccessAt: now, createdAt: now });
 
     res.cookie('ssid', cookieId, {
       maxAge: COOKIE_MAX_AGE,
@@ -62,7 +63,11 @@ authController.me = async (req, res) => {
     const cookieId = req.cookies?.ssid;
     if (!cookieId) return res.status(401).json({ error: 'Not authenticated' });
 
-    const session = await Session.findOne({ cookieId });
+    const session = await Session.findOneAndUpdate(
+      { cookieId },
+      { $set: { lastAccessAt: new Date() } },
+      { new: true }
+    );
     if (!session) return res.status(401).json({ error: 'Session expired' });
 
     const user = await User.findById(session.userId);

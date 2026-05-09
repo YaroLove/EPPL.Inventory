@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 export const suppliersApi = createApi({
   reducerPath: 'suppliers',
-  baseQuery: fetchBaseQuery({ baseUrl: '/suppliers/' }),
+  baseQuery: fetchBaseQuery({ baseUrl: '/suppliers/', credentials: 'include' }),
   tagTypes: ['Supplier'],
   endpoints: (builder) => ({
     getSuppliers: builder.query({

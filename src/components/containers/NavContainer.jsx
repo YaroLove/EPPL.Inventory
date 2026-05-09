@@ -261,7 +261,7 @@ const NavContainer = () => {
 
   const handleSignOut = async () => {
     try {
-      await fetch('/auth/logout', { method: 'POST' });
+      await fetch('/auth/logout', { method: 'POST', credentials: 'include' });
     } catch (_) {}
     dispatch(clearCurrentUser());
   };

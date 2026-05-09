@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 export const aiApi = createApi({
   reducerPath: 'ai',
-  baseQuery: fetchBaseQuery({ baseUrl: '/ai/' }),
+  baseQuery: fetchBaseQuery({ baseUrl: '/ai/', credentials: 'include' }),
   endpoints: (builder) => ({
     askAI: builder.mutation({
       query: ({ question, history }) => ({

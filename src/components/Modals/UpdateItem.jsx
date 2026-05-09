@@ -126,7 +126,7 @@ const UpdateItem = ({ item }) => {
   const uploadProps = {
     name: 'image',
     action: '/upload',
-    headers: { authorization: 'authorization-text' },
+    withCredentials: true,
     onChange: handleUpload,
     maxCount: 1,
     showUploadList: true,
@@ -409,7 +409,7 @@ const UpdateItem = ({ item }) => {
                 value={editDef.label}
                 onChange={(e) => setEditDef({ ...editDef, label: e.target.value })}
               />
-            </Form.Item>
+          </Form.Item>
             <Form.Item label="Field key">
               <Input value={editDef.fieldKey} disabled={editDef.builtin} />
             </Form.Item>
@@ -427,7 +427,7 @@ const UpdateItem = ({ item }) => {
                   )
                 )}
               </Select>
-            </Form.Item>
+          </Form.Item>
             <Form.Item label="Required">
               <Select
                 value={editDef.required}
