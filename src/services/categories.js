@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 export const categoriesApi = createApi({
   reducerPath: 'categories',
   baseQuery: fetchBaseQuery({ baseUrl: '/categories/', credentials: 'include' }),
-  tagTypes: ['Category'],
+  tagTypes: ['Category', 'Items'],
   endpoints: (builder) => ({
     getCategories: builder.query({
       query: () => '',
@@ -17,12 +17,21 @@ export const categoriesApi = createApi({
       }),
       invalidatesTags: ['Category'],
     }),
+    updateCategory: builder.mutation({
+      query: ({ id, name }) => ({
+        url: `${id}`,
+        method: 'PUT',
+        body: { name },
+      }),
+      invalidatesTags: ['Category', 'Items'],
+    }),
     deleteCategory: builder.mutation({
-      query: (id) => ({
+      query: ({ id, reassignTo }) => ({
         url: `${id}`,
         method: 'DELETE',
+        body: reassignTo ? { reassignTo } : undefined,
       }),
-      invalidatesTags: ['Category'],
+      invalidatesTags: ['Category', 'Items'],
     }),
   }),
 });
@@ -30,5 +39,6 @@ export const categoriesApi = createApi({
 export const {
   useGetCategoriesQuery,
   useAddCategoryMutation,
+  useUpdateCategoryMutation,
   useDeleteCategoryMutation,
 } = categoriesApi;

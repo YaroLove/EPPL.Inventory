@@ -11,6 +11,10 @@ router.post('/', categoriesController.add, (req, res) => {
   res.status(200).json(res.locals.category);
 });
 
+router.put('/:id', categoriesController.update, (req, res) => {
+  res.status(200).json(res.locals.category);
+});
+
 router.delete('/:id', categoriesController.delete, (req, res) => {
   res.status(200).json({ success: true });
 });

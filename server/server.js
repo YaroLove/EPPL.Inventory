@@ -67,9 +67,11 @@ app.use((req, res) =>
 );
 
 // ── Global error handler ──────────────────────────────────────────────────────
-app.use(({ code, error }, req, res, next) => {
+app.use(({ code, error, itemCount }, req, res, next) => {
   const status = code && code >= 400 && code < 600 ? code : 500;
-  res.status(status).json({ error: error?.message || error });
+  const payload = { error: error?.message || error };
+  if (itemCount !== undefined) payload.itemCount = itemCount;
+  res.status(status).json(payload);
 });
 
 // ── DB-dependent startup tasks ────────────────────────────────────────────────

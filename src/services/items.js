@@ -9,7 +9,7 @@ export const itemsApi = createApi({
   tagTypes: ['Items'],
   endpoints: (builder) => ({
     getItems: builder.query({
-      query: (category) => `${category}`,
+      query: (category) => encodeURIComponent(category),
       providesTags: (result, error, category) => [{ type: 'Items', id: category }],
     }),
     getAllItems: builder.query({
@@ -17,7 +17,7 @@ export const itemsApi = createApi({
       providesTags: ['Items'],
     }),
     getItemsBySupplier: builder.query({
-      query: (supplier) => `by-supplier/${supplier}`,
+      query: (supplier) => `by-supplier/${encodeURIComponent(supplier)}`,
       providesTags: (result, error, supplier) => [{ type: 'Items', id: `supplier-${supplier}` }],
     }),
     getDistinctValues: builder.query({
@@ -26,7 +26,7 @@ export const itemsApi = createApi({
     addItem: builder.mutation({
       query({ category, ...body }) {
         return {
-          url: `${category}`,
+          url: encodeURIComponent(category),
           method: 'POST',
           body,
         };
@@ -36,7 +36,7 @@ export const itemsApi = createApi({
     deleteItem: builder.mutation({
       query({ id, category }) {
         return {
-          url: `${category}/${id}`,
+          url: `${encodeURIComponent(category)}/${id}`,
           method: 'DELETE',
         };
       },
@@ -45,9 +45,9 @@ export const itemsApi = createApi({
     updateItem: builder.mutation({
       query({ id, category, ...body }) {
         return {
-          url: `${category}/${id}`,
+          url: `${encodeURIComponent(category)}/${id}`,
           method: 'PUT',
-          body,
+          body: { ...body, category },
         };
       },
       invalidatesTags: ['Items'],

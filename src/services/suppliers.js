@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 export const suppliersApi = createApi({
   reducerPath: 'suppliers',
   baseQuery: fetchBaseQuery({ baseUrl: '/suppliers/', credentials: 'include' }),
-  tagTypes: ['Supplier'],
+  tagTypes: ['Supplier', 'Items'],
   endpoints: (builder) => ({
     getSuppliers: builder.query({
       query: () => '',
@@ -17,12 +17,21 @@ export const suppliersApi = createApi({
       }),
       invalidatesTags: ['Supplier'],
     }),
+    updateSupplier: builder.mutation({
+      query: ({ id, name }) => ({
+        url: `${id}`,
+        method: 'PUT',
+        body: { name },
+      }),
+      invalidatesTags: ['Supplier', 'Items'],
+    }),
     deleteSupplier: builder.mutation({
-      query: (id) => ({
+      query: ({ id, reassignTo }) => ({
         url: `${id}`,
         method: 'DELETE',
+        body: reassignTo ? { reassignTo } : undefined,
       }),
-      invalidatesTags: ['Supplier'],
+      invalidatesTags: ['Supplier', 'Items'],
     }),
   }),
 });
@@ -30,5 +39,6 @@ export const suppliersApi = createApi({
 export const {
   useGetSuppliersQuery,
   useAddSupplierMutation,
+  useUpdateSupplierMutation,
   useDeleteSupplierMutation,
 } = suppliersApi;

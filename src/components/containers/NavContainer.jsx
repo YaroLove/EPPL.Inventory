@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { setDisplay } from './displaySlice';
 import { clearCurrentUser } from '../../loginSlice';
-import { Menu, Affix, Button, Input, Modal, Drawer, message } from 'antd';
+import { Menu, Affix, Button, Input, Modal, Drawer, Dropdown, Select, message } from 'antd';
 import {
   ShoppingCartOutlined,
   SettingOutlined,
@@ -16,10 +16,23 @@ import {
   HistoryOutlined,
   MenuOutlined,
   CloseOutlined,
+  EditOutlined,
+  DeleteOutlined,
 } from '@ant-design/icons';
 import styled from 'styled-components';
-import { useGetCategoriesQuery, useAddCategoryMutation } from '../../services/categories';
-import { useGetSuppliersQuery, useAddSupplierMutation } from '../../services/suppliers';
+import {
+  useGetCategoriesQuery,
+  useAddCategoryMutation,
+  useUpdateCategoryMutation,
+  useDeleteCategoryMutation,
+} from '../../services/categories';
+import {
+  useGetSuppliersQuery,
+  useAddSupplierMutation,
+  useUpdateSupplierMutation,
+  useDeleteSupplierMutation,
+} from '../../services/suppliers';
+import { useGetAllItemsQuery } from '../../services/items';
 import useMediaQuery from '../../hooks/useMediaQuery';
 
 const { SubMenu } = Menu;
@@ -174,6 +187,11 @@ const MobileTopBar = styled.div`
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
 `;
 
+const NavItemLabel = styled.span`
+  display: block;
+  width: 100%;
+`;
+
 const HamburgerBtn = styled.button`
   width: 40px;
   height: 40px;
@@ -193,27 +211,191 @@ const HamburgerBtn = styled.button`
   }
 `;
 
+function contextMenuOverlay(onEdit, onDelete) {
+  return (
+    <Menu
+      onClick={({ key, domEvent }) => {
+        domEvent.stopPropagation();
+        if (key === 'edit') onEdit();
+        if (key === 'delete') onDelete();
+      }}>
+      <Menu.Item key="edit" icon={<EditOutlined />}>
+        Edit
+      </Menu.Item>
+      <Menu.Item key="delete" icon={<DeleteOutlined />} danger>
+        Delete
+      </Menu.Item>
+    </Menu>
+  );
+}
+
+function wrapNavLabel(name, onEdit, onDelete) {
+  return (
+    <Dropdown overlay={contextMenuOverlay(onEdit, onDelete)} trigger={['contextMenu']}>
+      <NavItemLabel>{name}</NavItemLabel>
+    </Dropdown>
+  );
+}
+
 const NavContainer = () => {
   const dispatch = useDispatch();
   const displayName = useSelector((state) => state.login.displayName);
+  const display = useSelector((state) => state.display.display);
   const isMobile = useMediaQuery(768);
 
   const [current, setCurrent] = useState('dashboard');
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [categoryModalVisible, setCategoryModalVisible] = useState(false);
   const [supplierModalVisible, setSupplierModalVisible] = useState(false);
+  const [editTarget, setEditTarget] = useState(null);
+  const [deleteTarget, setDeleteTarget] = useState(null);
+  const [reassignTo, setReassignTo] = useState('');
   const [newName, setNewName] = useState('');
 
   const { data: categories = [] } = useGetCategoriesQuery();
   const { data: suppliers = [] } = useGetSuppliersQuery();
+  const { data: allItems = [] } = useGetAllItemsQuery();
   const [addCategory] = useAddCategoryMutation();
   const [addSupplier] = useAddSupplierMutation();
+  const [updateCategory] = useUpdateCategoryMutation();
+  const [updateSupplier] = useUpdateSupplierMutation();
+  const [deleteCategory] = useDeleteCategoryMutation();
+  const [deleteSupplier] = useDeleteSupplierMutation();
+
+  const displayType = display?.type || 'page';
+  const displayValue = display?.value || display;
+
+  const redirectIfViewingDeleted = (kind, deletedName) => {
+    if (kind === 'category' && displayType === 'category' && displayValue === deletedName) {
+      dispatch(setDisplay('dashboard'));
+      setCurrent('dashboard');
+    }
+    if (kind === 'supplier' && displayType === 'supplier' && displayValue === deletedName) {
+      dispatch(setDisplay('dashboard'));
+      setCurrent('dashboard');
+    }
+  };
+
+  const redirectIfViewingRenamed = (kind, oldName, newName) => {
+    if (kind === 'category' && displayType === 'category' && displayValue === oldName) {
+      dispatch(setDisplay({ type: 'category', value: newName }));
+      setCurrent(newName);
+    }
+    if (kind === 'supplier' && displayType === 'supplier' && displayValue === oldName) {
+      dispatch(setDisplay({ type: 'supplier', value: newName }));
+      setCurrent(`supplier-${newName}`);
+    }
+  };
+
+  const countItemsForCategory = (name) =>
+    allItems.filter((i) => i.category === name).length;
+
+  const countItemsForSupplier = (name) =>
+    allItems.filter((i) => i.supplier === name).length;
+
+  const openEditCategory = (cat) => {
+    setEditTarget({ kind: 'category', record: cat });
+    setNewName(cat.name);
+  };
+
+  const openEditSupplier = (sup) => {
+    setEditTarget({ kind: 'supplier', record: sup });
+    setNewName(sup.name);
+  };
+
+  const startDeleteCategory = (cat) => {
+    const itemCount = countItemsForCategory(cat.name);
+    if (itemCount === 0) {
+      Modal.confirm({
+        title: `Delete category "${cat.name}"?`,
+        okText: 'Delete',
+        okType: 'danger',
+        onOk: () => performDeleteCategory(cat, null),
+      });
+      return;
+    }
+    setReassignTo('');
+    setDeleteTarget({ kind: 'category', record: cat, itemCount });
+  };
+
+  const startDeleteSupplier = (sup) => {
+    const itemCount = countItemsForSupplier(sup.name);
+    if (itemCount === 0) {
+      Modal.confirm({
+        title: `Delete supplier "${sup.name}"?`,
+        okText: 'Delete',
+        okType: 'danger',
+        onOk: () => performDeleteSupplier(sup, null),
+      });
+      return;
+    }
+    setReassignTo('');
+    setDeleteTarget({ kind: 'supplier', record: sup, itemCount });
+  };
+
+  const performDeleteCategory = async (cat, reassign) => {
+    try {
+      await deleteCategory({ id: cat._id, reassignTo: reassign || undefined }).unwrap();
+      message.success(`Category "${cat.name}" deleted`);
+      redirectIfViewingDeleted('category', cat.name);
+      setDeleteTarget(null);
+      setReassignTo('');
+    } catch (err) {
+      message.error(err?.data?.error || 'Failed to delete category');
+    }
+  };
+
+  const performDeleteSupplier = async (sup, reassign) => {
+    try {
+      await deleteSupplier({ id: sup._id, reassignTo: reassign || undefined }).unwrap();
+      message.success(`Supplier "${sup.name}" deleted`);
+      redirectIfViewingDeleted('supplier', sup.name);
+      setDeleteTarget(null);
+      setReassignTo('');
+    } catch (err) {
+      message.error(err?.data?.error || 'Failed to delete supplier');
+    }
+  };
+
+  const handleSaveEdit = async () => {
+    if (!editTarget || !newName.trim()) return;
+    const trimmed = newName.trim();
+    try {
+      if (editTarget.kind === 'category') {
+        const oldName = editTarget.record.name;
+        await updateCategory({ id: editTarget.record._id, name: trimmed }).unwrap();
+        message.success(`Category renamed to "${trimmed}"`);
+        redirectIfViewingRenamed('category', oldName, trimmed);
+      } else {
+        const oldName = editTarget.record.name;
+        await updateSupplier({ id: editTarget.record._id, name: trimmed }).unwrap();
+        message.success(`Supplier renamed to "${trimmed}"`);
+        redirectIfViewingRenamed('supplier', oldName, trimmed);
+      }
+      setEditTarget(null);
+      setNewName('');
+    } catch (err) {
+      message.error(err?.data?.error || 'Failed to update');
+    }
+  };
+
+  const handleConfirmReassignDelete = async () => {
+    if (!deleteTarget || !reassignTo) {
+      message.warning('Please select where to reassign items');
+      return;
+    }
+    if (deleteTarget.kind === 'category') {
+      await performDeleteCategory(deleteTarget.record, reassignTo);
+    } else {
+      await performDeleteSupplier(deleteTarget.record, reassignTo);
+    }
+  };
 
   const handleClick = (e) => {
     setCurrent(e.key);
 
     if (['dashboard', 'default', 'favorites', 'settings', 'history'].includes(e.key)) {
-      dispatch(setDisplay(e.key));
+    dispatch(setDisplay(e.key));
     } else {
       const matchedCategory = categories.find((c) => c.name === e.key);
       if (matchedCategory) {
@@ -269,21 +451,21 @@ const NavContainer = () => {
   const menuContent = (MenuComponent) => (
     <MenuComponent
       theme="light"
-      onClick={handleClick}
+          onClick={handleClick}
       defaultOpenKeys={['sub1', 'sub2']}
-      selectedKeys={[current]}
-      mode="inline">
+          selectedKeys={[current]}
+          mode="inline">
       <Title onClick={handleLogoClick}>
         <img src={LOGO_URL} style={{ width: '180px', height: 'auto' }} alt="EPPL Logo" />
-      </Title>
-      <Menu.Item key="dashboard" icon={<DashboardOutlined />}>
-        Dashboard
-      </Menu.Item>
-      <SubMenu key="sub1" icon={<DatabaseOutlined />} title="Inventory">
+          </Title>
+          <Menu.Item key="dashboard" icon={<DashboardOutlined />}>
+            Dashboard
+          </Menu.Item>
+          <SubMenu key="sub1" icon={<DatabaseOutlined />} title="Inventory">
         {categories.map((cat) => (
           <Menu.Item key={cat.name} icon={<PaperClipOutlined />}>
-            {cat.name}
-          </Menu.Item>
+            {wrapNavLabel(cat.name, () => openEditCategory(cat), () => startDeleteCategory(cat))}
+            </Menu.Item>
         ))}
         <AddButton
           type="dashed"
@@ -301,8 +483,8 @@ const NavContainer = () => {
       <SubMenu key="sub2" icon={<TagOutlined />} title="Supplier">
         {suppliers.map((sup) => (
           <Menu.Item key={`supplier-${sup.name}`} icon={<ShoppingCartOutlined />}>
-            {sup.name}
-          </Menu.Item>
+            {wrapNavLabel(sup.name, () => openEditSupplier(sup), () => startDeleteSupplier(sup))}
+            </Menu.Item>
         ))}
         <AddButton
           type="dashed"
@@ -319,18 +501,18 @@ const NavContainer = () => {
       </SubMenu>
       <Menu.Item key="history" icon={<HistoryOutlined />}>
         History
-      </Menu.Item>
+            </Menu.Item>
       <SubMenu icon={<UserOutlined />} key="sub4" title={displayName || 'Account'}>
-        <Menu.Item icon={<HeartOutlined />} key="favorites">
-          Favorites
-        </Menu.Item>
+            <Menu.Item icon={<HeartOutlined />} key="favorites">
+              Favorites
+            </Menu.Item>
         <Menu.Item icon={<SettingOutlined />} key="settings">
-          Settings
-        </Menu.Item>
-      </SubMenu>
+              Settings
+            </Menu.Item>
+          </SubMenu>
       <SignOutButton shape="round" onClick={handleSignOut}>
-        Sign out
-      </SignOutButton>
+            Sign out
+          </SignOutButton>
     </MenuComponent>
   );
 
@@ -398,6 +580,69 @@ const NavContainer = () => {
           onPressEnter={handleAddSupplier}
           autoFocus
         />
+      </Modal>
+
+      <Modal
+        title={
+          editTarget?.kind === 'category' ? 'Edit Category' : editTarget ? 'Edit Supplier' : ''
+        }
+        visible={!!editTarget}
+        onOk={handleSaveEdit}
+        onCancel={() => {
+          setEditTarget(null);
+          setNewName('');
+        }}
+        okText="Save">
+        <Input
+          placeholder={editTarget?.kind === 'category' ? 'Category name' : 'Supplier name'}
+          value={newName}
+          onChange={(e) => setNewName(e.target.value)}
+          onPressEnter={handleSaveEdit}
+          autoFocus
+        />
+      </Modal>
+
+      <Modal
+        title={
+          deleteTarget?.kind === 'category' ? 'Delete Category' : 'Delete Supplier'
+        }
+        visible={!!deleteTarget}
+        onOk={handleConfirmReassignDelete}
+        onCancel={() => {
+          setDeleteTarget(null);
+          setReassignTo('');
+        }}
+        okText="Delete and reassign"
+        okType="danger">
+        <p style={{ marginBottom: 12, color: 'var(--text-2)' }}>
+          {deleteTarget?.itemCount} item(s) use &quot;{deleteTarget?.record?.name}&quot;. Reassign
+          them to:
+        </p>
+        <Select
+          style={{ width: '100%' }}
+          placeholder={
+            deleteTarget?.kind === 'category' ? 'Select category' : 'Select supplier'
+          }
+          value={reassignTo || undefined}
+          onChange={setReassignTo}
+          showSearch
+          optionFilterProp="children">
+          {deleteTarget?.kind === 'category'
+            ? categories
+                .filter((c) => c.name !== deleteTarget?.record?.name)
+                .map((c) => (
+                  <Select.Option key={c._id} value={c.name}>
+                    {c.name}
+                  </Select.Option>
+                ))
+            : suppliers
+                .filter((s) => s.name !== deleteTarget?.record?.name)
+                .map((s) => (
+                  <Select.Option key={s._id} value={s.name}>
+                    {s.name}
+                  </Select.Option>
+                ))}
+        </Select>
       </Modal>
     </>
   );
