@@ -278,6 +278,71 @@ const TypingDots = styled.div`
 
 const WELCOME_MESSAGE = "Hi! I'm your Lab Inventory AI. I can help you manage stock, look up product info from manufacturers, and update item details. Try one of these:";
 
+const formatInlineMarkdown = (text) => {
+  const parts = [];
+  const pattern = /(\*\*([^*]+)\*\*|_([^_]+)_|(https?:\/\/[^\s<]+))/g;
+  let lastIndex = 0;
+  let match;
+  let key = 0;
+
+  while ((match = pattern.exec(text)) !== null) {
+    if (match.index > lastIndex) {
+      parts.push(text.slice(lastIndex, match.index));
+    }
+    if (match[2]) {
+      parts.push(<strong key={key++}>{match[2]}</strong>);
+    } else if (match[3]) {
+      parts.push(<em key={key++}>{match[3]}</em>);
+    } else if (match[4]) {
+      parts.push(
+        <a key={key++} href={match[4]} target="_blank" rel="noopener noreferrer">
+          {match[4]}
+        </a>
+      );
+    }
+    lastIndex = match.index + match[0].length;
+  }
+
+  if (lastIndex < text.length) {
+    parts.push(text.slice(lastIndex));
+  }
+
+  return parts.length > 0 ? parts : text;
+};
+
+const renderMarkdown = (text) =>
+  String(text || '').split('\n').map((line, lineIdx) => {
+    const trimmed = line.trim();
+    const isBullet = /^[•\-]\s/.test(trimmed);
+    const content = isBullet ? trimmed.replace(/^[•\-]\s*/, '') : line;
+
+    if (isBullet) {
+      return (
+        <div key={lineIdx} style={{ display: 'flex', gap: '6px', alignItems: 'flex-start' }}>
+          <span style={{ flexShrink: 0 }}>•</span>
+          <span>{formatInlineMarkdown(content)}</span>
+        </div>
+      );
+    }
+
+    if (!line) {
+      return <div key={lineIdx} style={{ height: '0.4rem' }} />;
+    }
+
+    return <div key={lineIdx}>{formatInlineMarkdown(content)}</div>;
+  });
+
+const BubbleContent = styled.div`
+  p { margin: 0; }
+  a {
+    color: inherit;
+    text-decoration: underline;
+    word-break: break-all;
+  }
+  strong { font-weight: 600; }
+  em { font-style: italic; }
+`;
+
 const AIAssistant = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState('');
@@ -353,7 +418,13 @@ const AIAssistant = () => {
           <MessagesArea>
             {messages.map((msg, idx) => (
               <MessageRow key={idx} $isUser={msg.role === 'user'}>
-                <Bubble $isUser={msg.role === 'user'}>{msg.content}</Bubble>
+                <Bubble $isUser={msg.role === 'user'}>
+                  {msg.role === 'assistant' ? (
+                    <BubbleContent>{renderMarkdown(msg.content)}</BubbleContent>
+                  ) : (
+                    msg.content
+                  )}
+                </Bubble>
               </MessageRow>
             ))}
 
