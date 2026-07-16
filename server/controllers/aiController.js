@@ -99,16 +99,35 @@ const ALLOWED_UPDATE_FIELDS = [
 ];
 
 async function toolSearchItems(query) {
-  const q = query.toLowerCase();
+  const tokens = String(query || '')
+    .toLowerCase()
+    .split(/\s+/)
+    .filter(Boolean);
+  if (tokens.length === 0) return [];
+
   const items = await Item.find().lean().exec();
   const matches = items.filter(item => {
+    const catalog = (item.catalog || '').toLowerCase();
+    if (catalog && tokens.every(token => catalog.includes(token))) return true;
+
     const searchable = [
       item.name, item.itemType, item.sizeDimension,
       item.catalog, item.supplier, item.description,
       item.location, item.category,
     ].filter(Boolean).join(' ').toLowerCase();
-    return searchable.includes(q);
+
+    return tokens.every(token => searchable.includes(token));
   });
+
+  matches.sort((a, b) => {
+    const aCatalog = (a.catalog || '').toLowerCase();
+    const bCatalog = (b.catalog || '').toLowerCase();
+    const aCatalogHit = tokens.every(token => aCatalog.includes(token)) ? 1 : 0;
+    const bCatalogHit = tokens.every(token => bCatalog.includes(token)) ? 1 : 0;
+    if (aCatalogHit !== bCatalogHit) return bCatalogHit - aCatalogHit;
+    return 0;
+  });
+
   return matches.slice(0, 15).map(i => ({
     _id: i._id,
     name: i.name,
@@ -317,11 +336,15 @@ aiController.ask = async (req, res, next) => {
         });
       }
 
-      res.locals.answer = `Based on local inventory data: You have **${summary.totalItems} items** across **${summary.totalCategories} categories**.`
+      res.locals.answer = `**AI assistant is not configured.** Smart responses, inventory lookups, and web search require a valid \`OPENAI_API_KEY\` in your \`.env\` file (must start with \`sk-\`).
+
+Here is a basic snapshot from the local database:
+
+You have **${summary.totalItems} items** across **${summary.totalCategories} categories**.`
         + (lowItems.length > 0
           ? `\n\n⚠️ Low stock items:\n${lowItems.map(i => `• ${i}`).join('\n')}`
           : '\n\nAll items are well-stocked!')
-        + `\n\n_Note: AI features (web search, smart responses) require an OpenAI API key to be configured._`;
+        + `\n\n_Add your OpenAI API key to .env and restart the server to enable full AI chat._`;
       return next();
     } catch (err) {
       return next({ code: 500, error: 'Failed to process request' });
