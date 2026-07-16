@@ -43,6 +43,8 @@ const LOGO_URL =
 const StyledMenu = styled(Menu)`
   width: clamp(220px, 20vw, 280px);
   min-height: calc(100vh - 2.5rem);
+  max-height: calc(100vh - 2.5rem);
+  overflow-y: auto;
   border-radius: 20px;
   padding: 1.25rem 0.75rem 1.5rem 0.75rem;
   background: linear-gradient(175deg, #f0fdf4 0%, #dcfce7 100%);
@@ -452,7 +454,7 @@ const NavContainer = () => {
     <MenuComponent
       theme="light"
           onClick={handleClick}
-      defaultOpenKeys={['sub1', 'sub2']}
+      defaultOpenKeys={[]}
           selectedKeys={[current]}
           mode="inline">
       <Title onClick={handleLogoClick}>
