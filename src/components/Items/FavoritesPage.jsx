@@ -9,7 +9,7 @@ import { HeartFilled } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateFavorites } from '../../loginSlice';
 import { useGetFavoritesQuery, useRemoveFavoriteMutation } from '../../services/userApi';
-import { combinedItemTitle } from '../../utils/itemFormUtils';
+import { combinedItemTitle, isLowStock } from '../../utils/itemFormUtils';
 
 const StyledSpin = styled(Spin)`
   margin: 2rem;
@@ -68,7 +68,7 @@ const FavoritesPage = () => {
         />
 
         {items.map((item) => {
-          const isLow = item.quantity < (item.minStock || 5);
+          const isLow = isLowStock(item);
           const imageSrc = item.image
             ? item.image.startsWith('http') || item.image.startsWith('/uploads')
               ? item.image

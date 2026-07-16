@@ -12,7 +12,7 @@ import { updateFavorites } from '../../loginSlice.js';
 
 import { useGetAllItemsQuery } from '../../services/items.js';
 import { useAddFavoriteMutation, useRemoveFavoriteMutation } from '../../services/userApi.js';
-import { combinedItemTitle } from '../../utils/itemFormUtils.js';
+import { combinedItemTitle, isLowStock } from '../../utils/itemFormUtils.js';
 
 const StyledSpin = styled(Spin)`
   margin: 2rem;
@@ -105,7 +105,7 @@ const AllItemsList = ({ selectedIds, onToggleSelect }) => {
 
         {isSuccess &&
           displayItems.map((item) => {
-            const isLow = item.quantity < (item.minStock || 5);
+            const isLow = isLowStock(item);
             const imageSrc = item.image
               ? item.image.startsWith('http') || item.image.startsWith('/uploads')
                 ? item.image

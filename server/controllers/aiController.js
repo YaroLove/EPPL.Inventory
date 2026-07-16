@@ -1,6 +1,7 @@
 const OpenAI = require("openai");
 const { Item, Category } = require('../models/itemsModels');
 const ActionLog = require('../models/actionLogModel');
+const { isLowStock } = require('../utils/itemUtils');
 
 const aiController = {};
 
@@ -155,7 +156,7 @@ async function toolGetInventorySummary() {
   const grouped = {};
   for (const cat of categories) {
     const catItems = items.filter(i => i.category === cat.name);
-    const lowStock = catItems.filter(i => i.quantity < (i.minStock || 5));
+    const lowStock = catItems.filter(isLowStock);
     grouped[cat.name] = {
       totalItems: catItems.length,
       lowStockCount: lowStock.length,
@@ -177,7 +178,7 @@ async function toolGetInventorySummary() {
   if (uncategorized.length > 0) {
     grouped['(uncategorized)'] = {
       totalItems: uncategorized.length,
-      lowStockCount: uncategorized.filter(i => i.quantity < (i.minStock || 5)).length,
+      lowStockCount: uncategorized.filter(isLowStock).length,
       items: uncategorized.map(i => ({
         _id: i._id,
         title: [i.name, i.itemType, i.sizeDimension].filter(Boolean).join(' - '),
@@ -191,7 +192,7 @@ async function toolGetInventorySummary() {
   return {
     totalItems: items.length,
     totalCategories: categories.length,
-    totalLowStock: items.filter(i => i.quantity < (i.minStock || 5)).length,
+    totalLowStock: items.filter(isLowStock).length,
     categories: grouped,
   };
 }
@@ -332,7 +333,7 @@ aiController.ask = async (req, res, next) => {
       const lowItems = [];
       for (const [cat, data] of Object.entries(summary.categories)) {
         data.items.forEach(i => {
-          if (i.quantity < (i.minStock || 5)) lowItems.push(`${i.title} (${cat})`);
+          if (isLowStock(i)) lowItems.push(`${i.title} (${cat})`);
         });
       }
 
@@ -429,7 +430,7 @@ You have **${summary.totalItems} items** across **${summary.totalCategories} cat
 aiController.suggestions = async (req, res, next) => {
   try {
     const items = await Item.find().lean().exec();
-    const lowStock = items.filter(i => i.quantity < (i.minStock || 5));
+    const lowStock = items.filter(isLowStock);
     const suppliers = [...new Set(items.map(i => i.supplier).filter(Boolean))];
 
     const suggestions = [

@@ -97,3 +97,12 @@ export function combinedItemTitle(item) {
   if (!item) return '';
   return [item.name, item.itemType, item.sizeDimension].filter(Boolean).join(' - ');
 }
+
+export function isLowStock(item) {
+  if (!item) return false;
+  const raw = item.minStock;
+  if (raw === undefined || raw === null || raw === '') return false;
+  const min = Number(raw);
+  if (Number.isNaN(min)) return false;
+  return item.quantity !== undefined && item.quantity !== null && Number(item.quantity) <= min;
+}

@@ -2,7 +2,7 @@ import React from 'react';
 import { Modal, Descriptions, Tag } from 'antd';
 import styled from 'styled-components';
 import moment from 'moment';
-import { combinedItemTitle } from '../../utils/itemFormUtils';
+import { combinedItemTitle, isLowStock } from '../../utils/itemFormUtils';
 
 const HeroImage = styled.img`
   width: 100%;
@@ -26,7 +26,7 @@ const ItemDetailModal = ({ item, visible, onClose }) => {
 
   const title = combinedItemTitle(item) || item.name || 'Item';
   const imageSrc = resolveImageSrc(item.image);
-  const isLow = item.quantity < (item.minStock || 5);
+  const isLow = isLowStock(item);
 
   const customEntries = item.customFields
     ? Object.entries(item.customFields).filter(([, v]) => v !== null && v !== undefined && String(v).trim() !== '')
@@ -82,7 +82,7 @@ const ItemDetailModal = ({ item, visible, onClose }) => {
             {item.quantity} {item.quantityUnit || 'items'}
             {isLow && (
               <Tag color="red" style={{ marginLeft: 8, fontSize: '0.7rem' }}>
-                Min: {item.minStock || 5}
+                Min: {item.minStock}
               </Tag>
             )}
           </Descriptions.Item>
