@@ -2,9 +2,15 @@ const mongoose = require('mongoose');
 
 const MONGO_URI = process.env.MONGO_URI;
 
+// Explicitly pin the database name so it can never silently fall back to the
+// MongoDB default ("test"). All existing data lives in the "test" database.
+const MONGO_DB_NAME = process.env.MONGO_DB_NAME || 'test';
+
 mongoose
-  .connect(MONGO_URI)
-  .then(() => console.log('Connected to Mongo DB.'))
+  .connect(MONGO_URI, { dbName: MONGO_DB_NAME })
+  .then(() => {
+    console.log(`Connected to Mongo DB (database: ${mongoose.connection.name}).`);
+  })
   .catch((err) => {
     console.error('MongoDB connection error:', err.message);
     console.log('Server will continue without database connection...');

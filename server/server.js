@@ -21,6 +21,7 @@ const { seedFieldDefinitionsIfEmpty } = require('./utils/seedFieldDefinitions');
 const { seedAdmin } = require('./utils/seedAdmin');
 const requireAuth = require('./middleware/requireAuth');
 const Session = require('./models/sessionModel');
+const User = require('./models/userModel');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -88,6 +89,13 @@ runWhenDbReady(async () => {
     await Session.syncIndexes();
   } catch (e) {
     console.warn('Session index sync:', e.message);
+  }
+  try {
+    // Drops the stale `username_1` unique index left over from an old schema
+    // (users are now keyed by `email`) and ensures current indexes exist.
+    await User.syncIndexes();
+  } catch (e) {
+    console.warn('User index sync:', e.message);
   }
   await seedFieldDefinitionsIfEmpty();
   await seedAdmin();
