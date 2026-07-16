@@ -5,7 +5,7 @@ import { WarningOutlined, ShopOutlined, CalendarOutlined, PlusOutlined, DeleteOu
 import { useGetAllItemsQuery } from '../../services/items';
 import { combinedItemTitle, isLowStock } from '../../utils/itemFormUtils';
 import { useGetShoppingListQuery, useAddShoppingItemMutation, useDeleteShoppingItemMutation } from '../../services/shopping';
-import ItemDetailModal from '../Items/ItemDetailModal';
+import ItemDetailModal from '../Items/ItemDetailModal.jsx';
 import moment from 'moment';
 
 const { Title, Text } = Typography;
