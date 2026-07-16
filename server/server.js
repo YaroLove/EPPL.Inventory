@@ -3,6 +3,13 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 require('dotenv').config();
 
+const openaiKey = process.env.OPENAI_API_KEY;
+if (!openaiKey || !openaiKey.startsWith('sk-')) {
+  console.warn('[AI] OPENAI_API_KEY is missing or invalid — AI chat will use static fallback only');
+} else {
+  console.log('[AI] OpenAI API key configured');
+}
+
 console.log('Starting server...');
 
 const app = express();
